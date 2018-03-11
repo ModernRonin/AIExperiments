@@ -4,15 +4,20 @@ using System.Text;
 
 namespace ModernRonin.ConnectX.ConsoleGame
 {
-    public class InteractiveRunner
+    public abstract class ARunner
     {
-        readonly Game mGame;
-        readonly RuleBook mRuleBook;
-        public InteractiveRunner(Game game)
+        protected ARunner(Game game)
         {
-            mGame = game;
-            mRuleBook= new RuleBook(mGame);
+            Game = game;
+            Rules = new RuleBook(Game);
         }
+        protected Game Game { get; }
+        protected RuleBook Rules { get; }
+    }
+
+    public class InteractiveRunner : ARunner
+    {
+        public InteractiveRunner(Game game) : base(game) { }
         public void Run()
         {
             Render();
@@ -20,31 +25,28 @@ namespace ModernRonin.ConnectX.ConsoleGame
             do
             {
                 var move = GetMoveFromUser();
-                mGame.Execute(move);
+                Game.Execute(move);
                 Render();
-                result = mRuleBook.ResultFor();
+                result = Rules.ResultFor();
             }
             while (result == GameResult.Undecided);
 
-            if (GameResult.Draw==result)
-                Console.WriteLine("It's a draw");
-            else if (GameResult.Defeat==result)
-                Console.WriteLine($"Player {1-mGame.PlayerToMove} has won");
-            else 
-                Console.WriteLine("Weird result");
+            if (GameResult.Draw == result) Console.WriteLine("It's a draw");
+            else if (GameResult.Defeat == result) Console.WriteLine($"Player {1 - Game.PlayerToMove} has won");
+            else Console.WriteLine("Weird result");
         }
         void Render()
         {
             var buffer = new StringBuilder();
-            for (var y = mGame.Board.Height - 1; y >= 0; --y)
+            for (var y = Game.Board.Height - 1; y >= 0; --y)
             {
                 var row = string.Empty;
-                for (var x = 0; x < mGame.Board.Width; ++x) row += GetSymbolFor(mGame.Board[x, y]);
+                for (var x = 0; x < Game.Board.Width; ++x) row += GetSymbolFor(Game.Board[x, y]);
 
                 buffer.AppendLine(row);
             }
 
-            buffer.AppendLine(string.Join("", Enumerable.Range(0, mGame.Board.Width).Select(i => i.ToString())));
+            buffer.AppendLine(string.Join("", Enumerable.Range(0, Game.Board.Width).Select(i => i.ToString())));
             Console.WriteLine(buffer);
         }
         static string GetSymbolFor(Stone stone)
@@ -59,8 +61,8 @@ namespace ModernRonin.ConnectX.ConsoleGame
             var isValid = false;
             while (!isValid)
             {
-                var legalMoves = mRuleBook.LegalMoves().ToArray();
-                Console.Write($"Enter a move for player {mGame.PlayerToMove} [0..6]");
+                var legalMoves = Rules.LegalMoves().ToArray();
+                Console.Write($"Enter a move for player {Game.PlayerToMove} [0..6]");
                 var input = Console.ReadLine();
                 isValid = int.TryParse(input, out var x);
                 if (isValid) isValid = legalMoves.Any(m => m.X == x);
