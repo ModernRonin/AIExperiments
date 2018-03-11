@@ -4,12 +4,12 @@ using System.Linq;
 namespace ModernRonin.ConnectX
 {
     public interface IPlayer {
-        Move GetMove(int playerToMove, Move[] legalMoves);
+        Move GetMove(int playerToMove, Board board, Move[] legalMoves);
     }
 
     public class HumanConsolePlayer : IPlayer
     {
-        public Move GetMove(int playerToMove,  Move[] legalMoves)
+        public Move GetMove(int playerToMove, Board board, Move[] legalMoves)
         {
             var isValid = false;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -47,7 +47,7 @@ namespace ModernRonin.ConnectX
             do
             {
                 var playerToMove = Game.PlayerToMove;
-                var move = mPlayers[playerToMove].GetMove(playerToMove, Rules.LegalMoves().ToArray());
+                var move = mPlayers[playerToMove].GetMove(playerToMove, Game.Board, Rules.LegalMoves().ToArray());
                 Game.Execute(move);
                 Render();
                 result = Rules.ResultFor();
