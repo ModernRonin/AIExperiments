@@ -24,7 +24,8 @@ namespace ModernRonin.ConnectX
         {
             // TODO: make this implementation dependent on rulebook
             mRemainingStones[PlayerToMove].RemoveAt(0);
-            var y = Enumerable.Range(0, Board.Height).Where(i => Board[move.X, i].Owner < 0).Max() + 1;
+            var setYCoordinatesinColumn = Enumerable.Range(0, Board.Height).Where(i => Board[move.X, i].Owner > -1).ToArray();
+            var y = setYCoordinatesinColumn.Any() ? setYCoordinatesinColumn.Max() + 1 : 0;
             Board[move.X, y] = new Stone {Owner = PlayerToMove, Kind = move.StoneKind};
             PlayerToMove = 0 == PlayerToMove ? 1 : 0;
         }

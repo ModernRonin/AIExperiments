@@ -8,6 +8,11 @@ namespace ModernRonin.ConnectX.Tests
     public class GameTests
     {
         [Test]
+        public void Constructor_Initializes_Board()
+        {
+            new Game(GameConfiguration.Default).Board.Should().NotBeNull();
+        }
+        [Test]
         public void Constructor_Sets_PlayerToMoveId_To_Zero()
         {
             new Game(GameConfiguration.Default).PlayerToMove.Should().Be(0);
@@ -20,23 +25,6 @@ namespace ModernRonin.ConnectX.Tests
                      .All(s => s.Owner == 0 && s.Kind == StoneKind.Regular).Should().BeTrue();
             underTest.RemainingStones(1).Should().HaveCount(21).And.Subject
                      .All(s => s.Owner == 1 && s.Kind == StoneKind.Regular).Should().BeTrue();
-        }
-        [Test]
-        public void Constructor_Initializes_Board()
-        {
-            new Game(GameConfiguration.Default).Board.Should().NotBeNull();
-        }
-        [Test]
-        public void Execute_Toggles_PlayerToMove()
-        {
-            var underTest = new Game(GameConfiguration.Default);
-            underTest.Execute(new Move());
-
-            underTest.PlayerToMove.Should().Be(1);
-
-            underTest.Execute(new Move());
-
-            underTest.PlayerToMove.Should().Be(0);
         }
         [Test]
         public void Execute_Removes_Stone_From_RemainingStones()
@@ -55,10 +43,22 @@ namespace ModernRonin.ConnectX.Tests
             underTest.Board[0, 0].Should().BeEquivalentTo(new Stone());
 
             underTest.Execute(new Move());
-            underTest.Board[0, 1].Should().BeEquivalentTo(new Stone());
+            underTest.Board[0, 1].Should().BeEquivalentTo(new Stone {Owner = 1});
 
             underTest.Execute(new Move());
             underTest.Board[0, 2].Should().BeEquivalentTo(new Stone());
+        }
+        [Test]
+        public void Execute_Toggles_PlayerToMove()
+        {
+            var underTest = new Game(GameConfiguration.Default);
+            underTest.Execute(new Move());
+
+            underTest.PlayerToMove.Should().Be(1);
+
+            underTest.Execute(new Move());
+
+            underTest.PlayerToMove.Should().Be(0);
         }
     }
 }
