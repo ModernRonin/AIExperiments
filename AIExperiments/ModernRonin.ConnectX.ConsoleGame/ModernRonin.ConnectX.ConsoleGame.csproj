@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AConsoleRunner.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="InteractivePlayerVsPlayerRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
