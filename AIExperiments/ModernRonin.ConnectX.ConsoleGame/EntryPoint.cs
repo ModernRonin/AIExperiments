@@ -10,7 +10,7 @@ namespace ModernRonin.ConnectX.ConsoleGame
             var configuration = ParseArguments(args);
             if (null == configuration) return;
 
-            var runner = new InteractiveRunner(new Game(configuration));
+            var runner = new InteractivePlayerVsPlayerRunner(new Game(configuration));
             runner.Run();
             Console.WriteLine("Press <Enter> to exit...");
             Console.ReadLine();

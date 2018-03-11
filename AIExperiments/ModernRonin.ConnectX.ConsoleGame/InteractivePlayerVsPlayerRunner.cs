@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ModernRonin.ConnectX.ConsoleGame
 {
-    public class InteractiveRunner : ARunner
+    public class InteractivePlayerVsPlayerRunner : ARunner
     {
-        public InteractiveRunner(Game game) : base(game) { }
+        public InteractivePlayerVsPlayerRunner(Game game) : base(game) { }
         protected override void Render()
         {
             var buffer = new StringBuilder();
