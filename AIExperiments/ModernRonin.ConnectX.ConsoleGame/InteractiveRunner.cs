@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -13,12 +12,22 @@ namespace ModernRonin.ConnectX.ConsoleGame
         public void Run()
         {
             Render();
-            while (mRuleBook.ResultFor(mGame) == GameResult.Undecided)
+            GameResult result;
+            do
             {
                 var move = GetMoveFromUser();
                 mGame.Execute(move);
                 Render();
+                result = mRuleBook.ResultFor(mGame);
             }
+            while (result == GameResult.Undecided);
+
+            if (GameResult.Draw==result)
+                Console.WriteLine("It's a draw");
+            else if (GameResult.Defeat==result)
+                Console.WriteLine($"Player {1-mGame.PlayerToMove} has won");
+            else 
+                Console.WriteLine("Weird result");
         }
         void Render()
         {
@@ -26,10 +35,11 @@ namespace ModernRonin.ConnectX.ConsoleGame
             for (var y = mGame.Board.Height - 1; y >= 0; --y)
             {
                 var row = string.Empty;
-                for (var x = 0; x < mGame.Board.Width; ++x) { row += GetSymbolFor(mGame.Board[x, y]); }
+                for (var x = 0; x < mGame.Board.Width; ++x) row += GetSymbolFor(mGame.Board[x, y]);
 
                 buffer.AppendLine(row);
             }
+
             buffer.AppendLine(string.Join("", Enumerable.Range(0, mGame.Board.Width).Select(i => i.ToString())));
             Console.WriteLine(buffer);
         }
