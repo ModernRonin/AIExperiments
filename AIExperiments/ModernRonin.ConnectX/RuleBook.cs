@@ -6,9 +6,11 @@ namespace ModernRonin.ConnectX
     public class RuleBook
     {
         readonly Game mGame;
+        readonly IEnumerable<Coordinate[]> mWinningPossibilities;
         public RuleBook(Game game)
         {
             mGame = game;
+            mWinningPossibilities = WinningTuplesCalculator.WinningTuples(mGame.Board.Width, mGame.Board.Height);
         }
         public IEnumerable<Move> LegalMoves()
         {
@@ -29,8 +31,7 @@ namespace ModernRonin.ConnectX
         {
             var victoryOwner = mGame.PlayerToMove;
             var defeatOwner = 1 - victoryOwner;
-            var winningPossibilities = WinningTuplesCalculator.WinningTuples(mGame.Board.Width, mGame.Board.Height);
-            var winners = winningPossibilities.Select(GetOwnerOf).Where(o => o>-1).ToArray();
+            var winners = mWinningPossibilities.Select(GetOwnerOf).Where(o => o>-1).ToArray();
             if (winners.Any(o => o == defeatOwner)) return GameResult.Defeat;
             if (winners.Any(o => o == victoryOwner)) return GameResult.Victory;
             if (!LegalMoves().Any()) return GameResult.Draw;
