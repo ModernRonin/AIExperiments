@@ -4,36 +4,6 @@ using System.Text;
 
 namespace ModernRonin.ConnectX.ConsoleGame
 {
-    public abstract class ARunner
-    {
-        protected ARunner(Game game)
-        {
-            Game = game;
-            Rules = new RuleBook(Game);
-        }
-        protected Game Game { get; }
-        protected RuleBook Rules { get; }
-        public void Run()
-        {
-            Render();
-            GameResult result;
-            do
-            {
-                var move = GetMoveFromUser();
-                Game.Execute(move);
-                Render();
-                result = Rules.ResultFor();
-            }
-            while (result == GameResult.Undecided);
-
-            if (GameResult.Draw == result) Console.WriteLine("It's a draw");
-            else if (GameResult.Defeat == result) Console.WriteLine($"Player {1 - Game.PlayerToMove} has won");
-            else Console.WriteLine("Weird result");
-        }
-        protected abstract void Render();
-        protected abstract Move GetMoveFromUser();
-    }
-
     public class InteractiveRunner : ARunner
     {
         public InteractiveRunner(Game game) : base(game) { }
@@ -58,9 +28,10 @@ namespace ModernRonin.ConnectX.ConsoleGame
             if (1 == stone.Owner) return "o";
             return "?";
         }
-        protected override Move GetMoveFromUser()
+        protected override Move GetMove()
         {
             var isValid = false;
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             while (!isValid)
             {
                 var legalMoves = Rules.LegalMoves().ToArray();
@@ -73,6 +44,12 @@ namespace ModernRonin.ConnectX.ConsoleGame
             }
 
             return null;
+        }
+        protected override void UseResult(GameResult result)
+        {
+            if (GameResult.Draw == result) Console.WriteLine("It's a draw");
+            else if (GameResult.Defeat == result) Console.WriteLine($"Player {1 - Game.PlayerToMove} has won");
+            else Console.WriteLine("Weird result");
         }
     }
 }
