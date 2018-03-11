@@ -2,7 +2,7 @@
 {
     public class Move
     {
-        public int Y { get; set; }
+        public int X { get; set; }
         public StoneKind StoneKind { get; set; }
     }
 }

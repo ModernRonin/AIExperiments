@@ -19,7 +19,8 @@ namespace ModernRonin.ConnectX
         public IEnumerable<Stone> RemainingStones(int playerId) => mRemainingStones[playerId];
         public void Execute(Move move)
         {
-            
+            // TODO: make this variable dependent on rulebook
+
         }
     }
 }

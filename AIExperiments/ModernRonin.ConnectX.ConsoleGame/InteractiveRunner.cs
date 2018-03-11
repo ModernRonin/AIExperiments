@@ -47,9 +47,9 @@ namespace ModernRonin.ConnectX.ConsoleGame
                 var legalMoves = mRuleBook.LegalMoves(mGame).ToArray();
                 Console.Write($"Enter a move for player {mGame.PlayerToMoveId} [0..6]");
                 var input = Console.ReadLine();
-                isValid = int.TryParse(input, out var y);
-                if (isValid) isValid = legalMoves.Any(m => m.Y == y);
-                if (isValid) return new Move {Y = y, StoneKind = StoneKind.Regular};
+                isValid = int.TryParse(input, out var x);
+                if (isValid) isValid = legalMoves.Any(m => m.X == x);
+                if (isValid) return new Move {X = x, StoneKind = StoneKind.Regular};
                 Console.Error.WriteLine($"{input} is not a valid move!");
             }
 
