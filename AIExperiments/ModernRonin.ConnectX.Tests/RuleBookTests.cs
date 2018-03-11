@@ -41,16 +41,54 @@ namespace ModernRonin.ConnectX.Tests
         [Test]
         public void ResultFor_Discovers_Victory()
         {
-            const string board = @".......
+            var game = SetupGame(@".......
                                    .......
                                    x...x.o
                                    x...o.o
                                    x...o.o
-                                   x...o.x";
-            var game= SetupGame(board);
+                                   x...o.x");
 
             var result = new RuleBook().ResultFor(game);
             result.Should().Be(GameResult.Victory);
+        }
+        [Test]
+        public void ResultFor_Discovers_Defeat()
+        {
+            var game = SetupGame(@".......
+                                   .......
+                                   ....xox
+                                   x...oxo
+                                   x..ooxo
+                                   x.oxoxx");
+
+            var result = new RuleBook().ResultFor(game);
+            result.Should().Be(GameResult.Defeat);
+        }
+        [Test]
+        public void ResultFor_Discovers_Draw()
+        {
+            var game = SetupGame(@"xxxooox
+                                   ooooxxx
+                                   ooxoxox
+                                   xxoooxo
+                                   xoxxoxo
+                                   xxoxoxx");
+
+            var result = new RuleBook().ResultFor(game);
+            result.Should().Be(GameResult.Defeat);
+        }
+        [Test]
+        public void ResultFor_Discovers_Undecided()
+        {
+            var game = SetupGame(@"....x..
+                                   ....x..
+                                   ....xox
+                                   x...oxo
+                                   x..ooxo
+                                   x.oxoxx");
+
+            var result = new RuleBook().ResultFor(game);
+            result.Should().Be(GameResult.Defeat);
         }
     }
 }
