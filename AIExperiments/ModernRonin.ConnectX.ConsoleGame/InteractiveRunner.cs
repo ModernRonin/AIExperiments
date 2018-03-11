@@ -7,8 +7,12 @@ namespace ModernRonin.ConnectX.ConsoleGame
     public class InteractiveRunner
     {
         readonly Game mGame;
-        readonly RuleBook mRuleBook = new RuleBook();
-        public InteractiveRunner(Game game) => mGame = game;
+        readonly RuleBook mRuleBook;
+        public InteractiveRunner(Game game)
+        {
+            mGame = game;
+            mRuleBook= new RuleBook(mGame);
+        }
         public void Run()
         {
             Render();
@@ -18,7 +22,7 @@ namespace ModernRonin.ConnectX.ConsoleGame
                 var move = GetMoveFromUser();
                 mGame.Execute(move);
                 Render();
-                result = mRuleBook.ResultFor(mGame);
+                result = mRuleBook.ResultFor();
             }
             while (result == GameResult.Undecided);
 
@@ -55,7 +59,7 @@ namespace ModernRonin.ConnectX.ConsoleGame
             var isValid = false;
             while (!isValid)
             {
-                var legalMoves = mRuleBook.LegalMoves(mGame).ToArray();
+                var legalMoves = mRuleBook.LegalMoves().ToArray();
                 Console.Write($"Enter a move for player {mGame.PlayerToMove} [0..6]");
                 var input = Console.ReadLine();
                 isValid = int.TryParse(input, out var x);
