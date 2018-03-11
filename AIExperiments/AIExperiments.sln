@@ -9,9 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernRonin.ConnectX.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernRonin.ConnectX.ConsoleGame", "ModernRonin.ConnectX.ConsoleGame\ModernRonin.ConnectX.ConsoleGame.csproj", "{B52CADBE-839B-4E5B-9827-4DB97934EA6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernRonin.ConnectX.TreeSearchBot", "ModernRonin.ConnectX.TreeSearchBot\ModernRonin.ConnectX.TreeSearchBot.csproj", "{A8877F74-96FB-417B-B905-45B04E75B021}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModernRonin.ConnectX.TreeSearchBot", "ModernRonin.ConnectX.TreeSearchBot\ModernRonin.ConnectX.TreeSearchBot.csproj", "{A8877F74-96FB-417B-B905-45B04E75B021}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernRonin.ConnectX.TreeSearchBot.Tests", "ModernRonin.ConnectX.TreeSearchBot.Tests\ModernRonin.ConnectX.TreeSearchBot.Tests.csproj", "{A204BFCB-2F57-46E4-B445-562B30F4E47C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5DA03E8D-BCA2-4F4B-A65D-8B250F8AE567}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{6896AC72-7F12-477D-84AF-8340BA06FD19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "runners", "runners", "{AEEDC372-5AD9-447F-83B2-6F69852F2EFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +48,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C729530C-7CE8-4239-BB30-2323AC779329} = {6896AC72-7F12-477D-84AF-8340BA06FD19}
+		{72442C19-3D85-4860-A716-5353B3A2C55B} = {5DA03E8D-BCA2-4F4B-A65D-8B250F8AE567}
+		{B52CADBE-839B-4E5B-9827-4DB97934EA6D} = {AEEDC372-5AD9-447F-83B2-6F69852F2EFC}
+		{A8877F74-96FB-417B-B905-45B04E75B021} = {6896AC72-7F12-477D-84AF-8340BA06FD19}
+		{A204BFCB-2F57-46E4-B445-562B30F4E47C} = {5DA03E8D-BCA2-4F4B-A65D-8B250F8AE567}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0FF71F76-5946-42E7-A263-AB5F703836CB}
