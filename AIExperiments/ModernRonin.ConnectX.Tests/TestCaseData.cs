@@ -94,7 +94,7 @@ namespace ModernRonin.ConnectX.Tests
                                .......";
                 yield return @"....x..
                                ....x..
-                               ....xox
+                               ....x.x
                                x...oxo
                                x..ooxo
                                x.oxoxx";
