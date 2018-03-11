@@ -74,12 +74,12 @@ namespace ModernRonin.ConnectX.Tests
         {
             get
             {
-                yield return @"xxxooox
-                               ooooxxx
-                               ooxoxox
-                               xxoooxo
-                               xoxxoxo
-                               xxoxoxx";
+                yield return @"oooxooo
+                               xxxoxxx
+                               oooxooo
+                               xxxoxxx
+                               oooxooo
+                               xxxoxxx";
             }
         }
         public static IEnumerable<string> UndecidedCases
