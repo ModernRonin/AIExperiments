@@ -13,11 +13,6 @@ namespace ModernRonin.ConnectX.ConsoleGame
         }
         protected Game Game { get; }
         protected RuleBook Rules { get; }
-    }
-
-    public class InteractiveRunner : ARunner
-    {
-        public InteractiveRunner(Game game) : base(game) { }
         public void Run()
         {
             Render();
@@ -35,7 +30,14 @@ namespace ModernRonin.ConnectX.ConsoleGame
             else if (GameResult.Defeat == result) Console.WriteLine($"Player {1 - Game.PlayerToMove} has won");
             else Console.WriteLine("Weird result");
         }
-        void Render()
+        protected abstract void Render();
+        protected abstract Move GetMoveFromUser();
+    }
+
+    public class InteractiveRunner : ARunner
+    {
+        public InteractiveRunner(Game game) : base(game) { }
+        protected override void Render()
         {
             var buffer = new StringBuilder();
             for (var y = Game.Board.Height - 1; y >= 0; --y)
@@ -56,7 +58,7 @@ namespace ModernRonin.ConnectX.ConsoleGame
             if (1 == stone.Owner) return "o";
             return "?";
         }
-        Move GetMoveFromUser()
+        protected override Move GetMoveFromUser()
         {
             var isValid = false;
             while (!isValid)
