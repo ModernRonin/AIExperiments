@@ -20,7 +20,7 @@ namespace ModernRonin.ConnectX
         public void Execute(Move move)
         {
             // TODO: make this variable dependent on rulebook
-
+               
         }
     }
 }
