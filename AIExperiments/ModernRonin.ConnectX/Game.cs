@@ -9,11 +9,12 @@ namespace ModernRonin.ConnectX
         public Game(GameConfiguration configuration)
         {
             Board = new Board(configuration);
-            for (var playerId = 0; playerId < 2; ++playerId)
+            2.Do(playerId =>
             {
                 mRemainingStones[playerId]
-                    .AddRange(configuration.InitialStonesPerPlayer.Select(k => new Stone {Kind = k, Owner = playerId}));
-            }
+                    .AddRange(configuration.InitialStonesPerPlayer.Select(k =>
+                        new Stone {Kind = k, Owner = playerId}));
+            });
 
             PlayerToMove = 0;
         }
