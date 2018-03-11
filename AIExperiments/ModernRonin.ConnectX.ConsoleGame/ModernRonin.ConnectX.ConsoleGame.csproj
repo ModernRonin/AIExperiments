@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ConsoleRunner.cs" />
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="HumanConsolePlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

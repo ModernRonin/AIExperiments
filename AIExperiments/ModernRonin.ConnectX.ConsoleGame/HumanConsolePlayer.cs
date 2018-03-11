@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace ModernRonin.ConnectX
+namespace ModernRonin.ConnectX.ConsoleGame
 {
     public class HumanConsolePlayer : IPlayer
     {
