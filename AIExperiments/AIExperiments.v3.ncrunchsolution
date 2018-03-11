@@ -1,6 +1,10 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <MetricsExclusionList>
+      <Value>ModernRonin.ConnectX.ConsoleGame\ModernRonin.ConnectX.ConsoleGame.csproj</Value>
+      <Value>ModernRonin.ConnectX.Tests\ModernRonin.ConnectX.Tests.csproj</Value>
+    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

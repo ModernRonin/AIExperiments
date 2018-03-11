@@ -5,7 +5,7 @@ namespace ModernRonin.ConnectX
 {
     public class Game
     {
-        readonly List<Stone>[] mRemainingStones = new List<Stone>[2];
+        readonly List<Stone>[] mRemainingStones = {new List<Stone>(), new List<Stone>()};
         public Game(GameConfiguration configuration)
         {
             Board = new Board(configuration);
