@@ -52,5 +52,41 @@ namespace ModernRonin.ConnectX.Tests
                                x.oxoxx";
             }
         }
+        public static IEnumerable<object[]> LegalMovesCases
+        {
+            get
+            {
+                yield return new object[]
+                {
+                    @".......
+                      .......
+                      .......
+                      .......
+                      .......
+                      .......",
+                    new[] {0, 1, 2, 3, 4, 5, 6}
+                };
+                yield return new object[]
+                {
+                    @".x.o...
+                      .x.o...
+                      ox.o...
+                      xo.x...
+                      xo.x...
+                      xo.x...",
+                    new[] {0, 2, 4, 5, 6}
+                };
+                yield return new object[]
+                {
+                    @".......
+                      .......
+                      ....xox
+                      x...oxo
+                      x..ooxo
+                      x.oxoxx",
+                    new[] {0, 1, 2, 3, 4, 5, 6}
+                };
+            }
+        }
     }
 }

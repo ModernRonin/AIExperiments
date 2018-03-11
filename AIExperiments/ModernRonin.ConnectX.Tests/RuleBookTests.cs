@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace ModernRonin.ConnectX.Tests
@@ -72,6 +73,17 @@ namespace ModernRonin.ConnectX.Tests
 
             var result = new RuleBook().ResultFor(game);
             Assert.AreEqual(result, GameResult.Victory);
+        }
+        [Test]
+        [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.LegalMovesCases))]
+        public void LegalMoves(string boardInput, int[] expectedMoveX)
+        {
+            var game = SetupGame(boardInput);
+
+            var result= new RuleBook().LegalMoves(game);
+
+            result.All(m => m.StoneKind == StoneKind.Regular).Should().BeTrue();
+            result.Select(m => m.X).Should().BeEquivalentTo(expectedMoveX);
         }
     }
 }
