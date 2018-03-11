@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using FluentAssertions;
 using NUnit.Framework;
 
 namespace ModernRonin.ConnectX.Tests
@@ -39,56 +38,40 @@ namespace ModernRonin.ConnectX.Tests
             return result;
         }
         [Test]
-        public void ResultFor_Discovers_Victory()
+        [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.DefeatCases))]
+        public void ResultFor_Discovers_Defeat(string input)
         {
-            var game = SetupGame(@".......
-                                   .......
-                                   x...x.o
-                                   x...o.o
-                                   x...o.o
-                                   x...o.x");
+            var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            result.Should().Be(GameResult.Victory);
+            Assert.AreEqual(result, GameResult.Defeat);
         }
         [Test]
-        public void ResultFor_Discovers_Defeat()
+        [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.DrawCases))]
+        public void ResultFor_Discovers_Draw(string input)
         {
-            var game = SetupGame(@".......
-                                   .......
-                                   ....xox
-                                   x...oxo
-                                   x..ooxo
-                                   x.oxoxx");
+            var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            result.Should().Be(GameResult.Defeat);
+            Assert.AreEqual(result, GameResult.Draw);
         }
         [Test]
-        public void ResultFor_Discovers_Draw()
+        [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.UndecidedCases))]
+        public void ResultFor_Discovers_Undecided(string input)
         {
-            var game = SetupGame(@"xxxooox
-                                   ooooxxx
-                                   ooxoxox
-                                   xxoooxo
-                                   xoxxoxo
-                                   xxoxoxx");
+            var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            result.Should().Be(GameResult.Defeat);
+            Assert.AreEqual(result, GameResult.Undecided);
         }
         [Test]
-        public void ResultFor_Discovers_Undecided()
+        [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.VictoryCases))]
+        public void ResultFor_Discovers_Victory(string input)
         {
-            var game = SetupGame(@"....x..
-                                   ....x..
-                                   ....xox
-                                   x...oxo
-                                   x..ooxo
-                                   x.oxoxx");
+            var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            result.Should().Be(GameResult.Defeat);
+            Assert.AreEqual(result, GameResult.Victory);
         }
     }
 }
