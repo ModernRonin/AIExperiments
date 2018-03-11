@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Fclp;
 
 namespace ModernRonin.ConnectX.ConsoleGame
@@ -12,10 +8,10 @@ namespace ModernRonin.ConnectX.ConsoleGame
         static void Main(string[] args)
         {
             var configuration = ParseArguments(args);
-            if (null==configuration) return;
+            if (null == configuration) return;
 
-            Console.WriteLine(configuration);
-
+            var runner = new InteractiveRunner(new Game(configuration));
+            runner.Run();
             Console.WriteLine("Press <Enter> to exit...");
             Console.ReadLine();
         }

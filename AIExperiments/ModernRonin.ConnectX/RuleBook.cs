@@ -1,15 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace ModernRonin.ConnectX {
+namespace ModernRonin.ConnectX
+{
     public class RuleBook
     {
-        public IEnumerable<Move> LegalMoves(Board board)
-        {
-            return null;
-        }
-        public GameResult ResultFor(Board board)
-        {
-            return GameResult.Undecided;
-        }
+        public IEnumerable<Move> LegalMoves(Game game) => null;
+        public GameResult ResultFor(Game game) => GameResult.Undecided;
     }
 }

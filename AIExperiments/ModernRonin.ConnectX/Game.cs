@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace ModernRonin.ConnectX
 {
-    public class GameState
+    public class Game
     {
         readonly List<Stone>[] mRemainingStones = new List<Stone>[2];
-        public GameState(GameConfiguration configuration)
+        public Game(GameConfiguration configuration)
         {
             Board = new Board(configuration);
             for (var playerId = 0; playerId < 2; ++playerId)
@@ -17,5 +17,9 @@ namespace ModernRonin.ConnectX
         public Board Board { get; }
         public int PlayerToMoveId { get; }
         public IEnumerable<Stone> RemainingStones(int playerId) => mRemainingStones[playerId];
+        public void Execute(Move move)
+        {
+            
+        }
     }
 }
