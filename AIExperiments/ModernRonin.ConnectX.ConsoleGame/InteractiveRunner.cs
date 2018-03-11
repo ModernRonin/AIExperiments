@@ -12,6 +12,7 @@ namespace ModernRonin.ConnectX.ConsoleGame
         public InteractiveRunner(Game game) => mGame = game;
         public void Run()
         {
+            Render();
             while (mRuleBook.ResultFor(mGame) == GameResult.Undecided)
             {
                 var move = GetMoveFromUser();
@@ -22,7 +23,7 @@ namespace ModernRonin.ConnectX.ConsoleGame
         void Render()
         {
             var buffer = new StringBuilder();
-            for (var y = mGame.Board.Height - 1; y >= 0; ++y)
+            for (var y = mGame.Board.Height - 1; y >= 0; --y)
             {
                 var row = string.Empty;
                 for (var x = 0; x < mGame.Board.Width; ++x) { row += GetSymbolFor(mGame.Board[x, y]); }
