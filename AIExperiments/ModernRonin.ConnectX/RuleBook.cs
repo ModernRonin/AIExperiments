@@ -46,7 +46,7 @@ namespace ModernRonin.ConnectX
                 Enumerable.Range(0, 4).Select(o => new Coordinate(startX + o, startY - o)).ToArray();
 
             for (var x = 0; x <= width - 4; ++x)
-            for (var y = height-1; y >= height - 4; --y)
+            for (var y = 3; y < height; ++y)
                 yield return from(x, y);
         }
         static IEnumerable<Coordinate[]> WinningTuples(int width, int height) =>
@@ -81,6 +81,7 @@ namespace ModernRonin.ConnectX
             }
             public int X { get; }
             public int Y { get; }
+            public override string ToString() => $"({X}/{Y})";
         }
     }
 }

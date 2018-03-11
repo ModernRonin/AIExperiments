@@ -45,7 +45,7 @@ namespace ModernRonin.ConnectX.Tests
             var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            Assert.AreEqual(result, GameResult.Defeat);
+            Assert.AreEqual(GameResult.Defeat, result);
         }
         [Test]
         [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.DrawCases))]
@@ -54,7 +54,8 @@ namespace ModernRonin.ConnectX.Tests
             var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            Assert.AreEqual(result, GameResult.Draw);
+            
+            Assert.AreEqual(GameResult.Draw, result);
         }
         [Test]
         [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.UndecidedCases))]
@@ -63,7 +64,7 @@ namespace ModernRonin.ConnectX.Tests
             var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            Assert.AreEqual(result, GameResult.Undecided);
+            Assert.AreEqual(GameResult.Undecided, result);
         }
         [Test]
         [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.VictoryCases))]
@@ -72,7 +73,7 @@ namespace ModernRonin.ConnectX.Tests
             var game = SetupGame(input);
 
             var result = new RuleBook().ResultFor(game);
-            Assert.AreEqual(result, GameResult.Victory);
+            Assert.AreEqual(GameResult.Victory, result);
         }
         [Test]
         [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.LegalMovesCases))]
@@ -80,7 +81,7 @@ namespace ModernRonin.ConnectX.Tests
         {
             var game = SetupGame(boardInput);
 
-            var result= new RuleBook().LegalMoves(game);
+            var result= new RuleBook().LegalMoves(game).ToArray();
 
             result.All(m => m.StoneKind == StoneKind.Regular).Should().BeTrue();
             result.Select(m => m.X).Should().BeEquivalentTo(expectedMoveX);
