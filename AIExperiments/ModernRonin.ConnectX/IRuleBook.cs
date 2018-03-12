@@ -6,5 +6,6 @@ namespace ModernRonin.ConnectX
     {
         IEnumerable<Move> LegalMoves { get; }
         GameResult Result { get; }
+        IRuleBook With(IGame game);
     }
 }

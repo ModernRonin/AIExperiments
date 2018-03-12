@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace ModernRonin.ConnectX.Tests
@@ -27,7 +28,7 @@ namespace ModernRonin.ConnectX.Tests
 
             void set(int x, int y)
             {
-                board[x, y] = new Stone(StoneKind.Regular,map(rows[y][x]));
+                board[x, y] = new Stone(StoneKind.Regular, map(rows[y][x]));
             }
 
             7.By(6).Do(set);
@@ -37,6 +38,17 @@ namespace ModernRonin.ConnectX.Tests
             var result = new Game(GameConfiguration.Default);
             Set(result.Board, board);
             return result;
+        }
+        [Test]
+        [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.LegalMovesCases))]
+        public void LegalMoves(string boardInput, int[] expectedMoveX)
+        {
+            var game = SetupGame(boardInput);
+
+            var result = new RuleBook(game).LegalMoves.ToArray();
+
+            result.All(m => m.StoneKind == StoneKind.Regular).Should().BeTrue();
+            result.Select(m => m.X).Should().BeEquivalentTo(expectedMoveX);
         }
         [Test]
         [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.DefeatCases))]
@@ -54,7 +66,7 @@ namespace ModernRonin.ConnectX.Tests
             var game = SetupGame(input);
 
             var result = new RuleBook(game).Result;
-            
+
             Assert.AreEqual(GameResult.Draw, result);
         }
         [Test]
@@ -76,15 +88,20 @@ namespace ModernRonin.ConnectX.Tests
             Assert.AreEqual(GameResult.Victory, result);
         }
         [Test]
-        [TestCaseSource(typeof(TestCaseData), nameof(TestCaseData.LegalMovesCases))]
-        public void LegalMoves(string boardInput, int[] expectedMoveX)
+        public void With_Returns_RuleBook_With_Passed_Game()
         {
-            var game = SetupGame(boardInput);
+            var underTest = new RuleBook(new Game(GameConfiguration.Default));
 
-            var result= new RuleBook(game).LegalMoves.ToArray();
+            var newGame = Substitute.For<IGame>();
+            ((RuleBook) underTest.With(newGame)).Game.Should().BeSameAs(newGame);
+        }
+        [Test]
+        public void With_Returns_RuleBook_With_Same_WinnerTuples()
+        {
+            var underTest = new RuleBook(new Game(GameConfiguration.Default));
 
-            result.All(m => m.StoneKind == StoneKind.Regular).Should().BeTrue();
-            result.Select(m => m.X).Should().BeEquivalentTo(expectedMoveX);
+            var newGame = Substitute.For<IGame>();
+            ((RuleBook) underTest.With(newGame)).WinnerTuples.Should().BeSameAs(underTest.WinnerTuples);
         }
     }
 }

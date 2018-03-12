@@ -5,18 +5,20 @@ namespace ModernRonin.ConnectX
 {
     public class RuleBook : IRuleBook
     {
-        readonly IGame mGame;
-        readonly IEnumerable<Coordinate[]> mWinningPossibilities;
-        public RuleBook(IGame game)
+        RuleBook(IGame game, IEnumerable<Coordinate[]> winnerTuples)
         {
-            mGame = game;
-            mWinningPossibilities = WinningTuplesCalculator.WinningTuples(mGame.Board.Width, mGame.Board.Height);
+            Game = game;
+            WinnerTuples = winnerTuples;
         }
+        public RuleBook(IGame game) : this(game,
+            WinningTuplesCalculator.WinningTuples(game.Board.Width, game.Board.Height)) { }
+        public IGame Game { get; }
+        public IEnumerable<Coordinate[]> WinnerTuples { get; }
         public IEnumerable<Move> LegalMoves
         {
             get
             {
-                var board = mGame.Board;
+                var board = Game.Board;
 
                 bool isColumnFree(int x) => Enumerable.Range(0, board.Height).Any(y => board[x, y].Owner == -1);
 
@@ -28,18 +30,19 @@ namespace ModernRonin.ConnectX
         {
             get
             {
-                var victoryOwner = mGame.PlayerToMove;
+                var victoryOwner = Game.PlayerToMove;
                 var defeatOwner = 1 - victoryOwner;
-                var winners = mWinningPossibilities.Select(GetOwnerOf).Where(o => o > -1).ToArray();
+                var winners = WinnerTuples.Select(GetOwnerOf).Where(o => o > -1).ToArray();
                 if (winners.Any(o => o == defeatOwner)) return GameResult.Defeat;
                 if (winners.Any(o => o == victoryOwner)) return GameResult.Victory;
                 if (!LegalMoves.Any()) return GameResult.Draw;
                 return GameResult.Undecided;
             }
         }
+        public IRuleBook With(IGame game) => new RuleBook(game, WinnerTuples);
         int GetOwnerOf(Coordinate[] tuple)
         {
-            var owners = tuple.Select(t => mGame.Board[t.X, t.Y].Owner).Distinct().ToArray();
+            var owners = tuple.Select(t => Game.Board[t.X, t.Y].Owner).Distinct().ToArray();
             if (owners.Length > 1) return -1;
             return owners.Single();
         }
