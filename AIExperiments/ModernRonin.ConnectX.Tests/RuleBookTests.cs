@@ -44,7 +44,7 @@ namespace ModernRonin.ConnectX.Tests
         {
             var game = SetupGame(input);
 
-            var result = new RuleBook(game).ResultFor();
+            var result = new RuleBook(game).Result;
             Assert.AreEqual(GameResult.Defeat, result);
         }
         [Test]
@@ -53,7 +53,7 @@ namespace ModernRonin.ConnectX.Tests
         {
             var game = SetupGame(input);
 
-            var result = new RuleBook(game).ResultFor();
+            var result = new RuleBook(game).Result;
             
             Assert.AreEqual(GameResult.Draw, result);
         }
@@ -63,7 +63,7 @@ namespace ModernRonin.ConnectX.Tests
         {
             var game = SetupGame(input);
 
-            var result = new RuleBook(game).ResultFor();
+            var result = new RuleBook(game).Result;
             Assert.AreEqual(GameResult.Undecided, result);
         }
         [Test]
@@ -72,7 +72,7 @@ namespace ModernRonin.ConnectX.Tests
         {
             var game = SetupGame(input);
 
-            var result = new RuleBook(game).ResultFor();
+            var result = new RuleBook(game).Result;
             Assert.AreEqual(GameResult.Victory, result);
         }
         [Test]
@@ -81,7 +81,7 @@ namespace ModernRonin.ConnectX.Tests
         {
             var game = SetupGame(boardInput);
 
-            var result= new RuleBook(game).LegalMoves().ToArray();
+            var result= new RuleBook(game).LegalMoves.ToArray();
 
             result.All(m => m.StoneKind == StoneKind.Regular).Should().BeTrue();
             result.Select(m => m.X).Should().BeEquivalentTo(expectedMoveX);

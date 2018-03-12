@@ -24,7 +24,7 @@ namespace ModernRonin.ConnectX
                 var move = mPlayers[playerToMove].GetMove(Rules, Game);
                 Game.Execute(move);
                 Render();
-                result = Rules.ResultFor();
+                result = Rules.Result;
             }
             while (result == GameResult.Undecided);
 

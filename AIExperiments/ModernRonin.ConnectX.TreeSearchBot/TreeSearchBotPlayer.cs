@@ -12,8 +12,18 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             mRules = rules;
             mGame = game;
         }
-        public IEnumerable<Move> LegalMoves => mRules.LegalMoves();
-        public int Evaluation { get; }
+        public IEnumerable<Move> LegalMoves => mRules.LegalMoves;
+        public int Evaluation
+        {
+            get
+            {
+                switch (mRules.Result)
+                {
+                }
+                return 0;
+
+            }
+        }
         public IGameState<Move> Execute(Move move)
         {
             var copy= new Game(mGame);
