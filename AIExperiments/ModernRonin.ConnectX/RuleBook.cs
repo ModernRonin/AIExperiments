@@ -19,7 +19,7 @@ namespace ModernRonin.ConnectX
             bool isColumnFree(int x) => Enumerable.Range(0, board.Height).Any(y => board[x, y].Owner == -1);
 
             var validX = Enumerable.Range(0, board.Width).Where(isColumnFree);
-            return validX.Select(x => new Move {X = x}).ToArray();
+            return validX.Select(x => new Move(x)).ToArray();
         }
         int GetOwnerOf(Coordinate[] tuple)
         {

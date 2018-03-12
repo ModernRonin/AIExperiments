@@ -15,11 +15,11 @@ namespace ModernRonin.ConnectX.ConsoleGame
                 var input = Console.ReadLine();
                 isValid = int.TryParse(input, out var x);
                 if (isValid) isValid = rules.LegalMoves().Any(m => m.X == x);
-                if (isValid) return new Move {X = x, StoneKind = StoneKind.Regular};
+                if (isValid) return new Move(x);
                 Console.Error.WriteLine($"{input} is not a valid move!");
             }
 
-            return null;
+            throw new InvalidOperationException();
         }
     }
 }

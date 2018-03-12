@@ -31,7 +31,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         public Move GetMove(RuleBook rules, Game game)
         {
             //var (eval, bestLine) = TreeSearch.NegaMax()
-            return null;
+            return new Move();
         }
     }
 }

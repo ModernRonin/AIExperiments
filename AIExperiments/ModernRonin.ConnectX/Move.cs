@@ -1,8 +1,13 @@
 ﻿namespace ModernRonin.ConnectX
 {
-    public class Move
+    public struct Move
     {
-        public int X { get; set; }
-        public StoneKind StoneKind { get; set; }
+        public Move(int x, StoneKind stoneKind = StoneKind.Regular)
+        {
+            X = x;
+            StoneKind = stoneKind;
+        }
+        public int X { get;  }
+        public StoneKind StoneKind { get;  }
     }
 }
