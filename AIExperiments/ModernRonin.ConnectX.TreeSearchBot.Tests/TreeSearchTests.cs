@@ -10,11 +10,6 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
     {
         class GameState : IGameState<char>
         {
-            #region Implementing IGameState
-            public IEnumerable<char> LegalMoves => mMoves.Keys;
-            public int Evaluation { get; private set; }
-            public IGameState<char> Execute(char move) => mMoves[move];
-            #endregion
             readonly Dictionary<char, GameState> mMoves = new Dictionary<char, GameState>();
             public int this[string line]
             {
@@ -29,6 +24,11 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
                 return result;
             }
             public void EvaluatesAs(int evaluation) => Evaluation = evaluation;
+            #region Implementing IGameState
+            public IEnumerable<char> LegalMoves => mMoves.Keys;
+            public int Evaluation { get; private set; }
+            public IGameState<char> Execute(char move) => mMoves[move];
+            #endregion
         }
 
         /* 0
@@ -47,14 +47,16 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
         }
         /* 0
          * 1        A5           B11             C9                 eval from player 0's view
-         * 2    Aa10  Aa5   Bb11    Bb13    Cc9     Cc17            eval from player 1's view
-         * ==> [11, Bb]
+         * 2    Aa10  Ab5   Ba11    Bb13    Ca9     Cb17            eval from player 1's view
+         * ==> [11, Ba]
          */
         [Test]
         public void TwoPlies()
         {
-            var startState = new GameState();
-            //startState["Aa"]= 
+            var startState = new GameState {["Aa"] = 10, ["Ab"] = 5, ["Ba"] = 11, ["Bb"] = 13, ["Ca"] = 9, ["Cb"] = 17};
+            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 2);
+            bestEval.Should().Be(11);
+            bestLine.Should().Equal('B', 'a');
         }
     }
 }
