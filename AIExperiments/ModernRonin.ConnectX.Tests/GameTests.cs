@@ -27,6 +27,34 @@ namespace ModernRonin.ConnectX.Tests
                      .All(s => s.Owner == 1 && s.Kind == StoneKind.Regular).Should().BeTrue();
         }
         [Test]
+        public void CopyConstructor_Copies_Board()
+        {
+            var original = new Game(GameConfiguration.Default);
+            original.Execute(new Move());
+
+            var copy = new Game(original);
+            copy.Board.Should().NotBeSameAs(original.Board);
+            copy.Board[0, 0].Owner.Should().Be(0);
+        }
+        [Test]
+        public void CopyConstructor_Copies_PlayerToMove()
+        {
+            var original = new Game(GameConfiguration.Default);
+            original.Execute(new Move());
+
+            new Game(original).PlayerToMove.Should().Be(1);
+        }
+        [Test]
+        public void CopyConstructor_Copies_RemainingStones()
+        {
+            var original = new Game(GameConfiguration.Default);
+            original.Execute(new Move());
+
+            var copy = new Game(original);
+            copy.RemainingStones(0).Should().HaveCount(20).And.NotBeSameAs(original.RemainingStones(0));
+            copy.RemainingStones(1).Should().HaveCount(21).And.NotBeSameAs(original.RemainingStones(1));
+        }
+        [Test]
         public void Execute_Removes_Stone_From_RemainingStones()
         {
             var underTest = new Game(GameConfiguration.Default);

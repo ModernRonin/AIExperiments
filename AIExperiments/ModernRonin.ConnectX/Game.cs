@@ -19,8 +19,9 @@ namespace ModernRonin.ConnectX
         }
         public Game(Game rhs)
         {
-            PlayerToMove = rhs.PlayerToMove;
+            Board = new Board(rhs.Board);
             2.Do(playerId => { mRemainingStones[playerId].AddRange(rhs.mRemainingStones[playerId]); });
+            PlayerToMove = rhs.PlayerToMove;
         }
         public Board Board { get; }
         public int PlayerToMove { get; private set; }
