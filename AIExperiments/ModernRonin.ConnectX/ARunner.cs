@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace ModernRonin.ConnectX
 {
@@ -22,7 +21,7 @@ namespace ModernRonin.ConnectX
             do
             {
                 var playerToMove = Game.PlayerToMove;
-                var move = mPlayers[playerToMove].GetMove(playerToMove, Game.Board, Rules.LegalMoves().ToArray());
+                var move = mPlayers[playerToMove].GetMove(Rules, Game);
                 Game.Execute(move);
                 Render();
                 result = Rules.ResultFor();

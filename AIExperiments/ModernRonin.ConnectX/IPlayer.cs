@@ -2,6 +2,6 @@
 {
     public interface IPlayer
     {
-        Move GetMove(int playerToMove, Board board, Move[] legalMoves);
+        Move GetMove(RuleBook rules, Game game);
     }
 }
