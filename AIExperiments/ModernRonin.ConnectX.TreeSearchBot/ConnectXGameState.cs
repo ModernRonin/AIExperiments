@@ -6,8 +6,8 @@ namespace ModernRonin.ConnectX.TreeSearchBot
     public class ConnectXGameState : IGameState<Move>
     {
         readonly Game mGame;
-        readonly RuleBook mRules;
-        public ConnectXGameState(RuleBook rules, Game game)
+        readonly IRuleBook mRules;
+        public ConnectXGameState(IRuleBook rules, Game game)
         {
             mRules = rules;
             mGame = game;

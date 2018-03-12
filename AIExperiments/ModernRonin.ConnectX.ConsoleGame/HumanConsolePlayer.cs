@@ -5,7 +5,7 @@ namespace ModernRonin.ConnectX.ConsoleGame
 {
     public class HumanConsolePlayer : IPlayer
     {
-        public Move GetMove(RuleBook rules, Game game)
+        public Move GetMove(IRuleBook rules, Game game)
         {
             var isValid = false;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse

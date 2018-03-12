@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ModernRonin.ConnectX
 {
-    public class RuleBook
+    public class RuleBook : IRuleBook
     {
         readonly Game mGame;
         readonly IEnumerable<Coordinate[]> mWinningPossibilities;
