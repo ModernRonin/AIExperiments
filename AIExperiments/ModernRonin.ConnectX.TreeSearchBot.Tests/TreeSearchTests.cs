@@ -31,8 +31,8 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             #endregion
         }
 
-        /* 0
-         * 1    A10     B9      C13
+        /* 0                            pick maximum
+         * 1    A10     B9      C13     eval from player 0's view - evaluation
          *
          * ==> [13, C]
          */
@@ -45,9 +45,9 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             bestEval.Should().Be(13);
             bestLine.Should().Equal('C');
         }
-        /* 0
-         * 1        A5           B11             C9                 eval from player 0's view
-         * 2    Aa10  Ab5   Ba11    Bb13    Ca9     Cb17            eval from player 1's view
+        /* 0                                                        pick maximum   
+         * 1        A5           B11             C9                 eval from player 0's view - pick minimum
+         * 2    Aa10  Ab5   Ba11    Bb13    Ca9     Cb17            eval from player 1's view - evaluation
          * ==> [11, Ba]
          */
         [Test]
@@ -57,6 +57,20 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 2);
             bestEval.Should().Be(11);
             bestLine.Should().Equal('B', 'a');
+        }
+        /* 0                                                                        pick maximum
+         * 1            A7                                  B6                      eval from player 0's view - pick minimum
+         * 2     Aa7             Ab9              Ba10                 Bb6          eval from player 1's view - pick maximum
+         * 3 AaA7   AaB4     AbA8  AbB9    BaA2   BaB8   BaC10     BbA6   BbB4      eval from player 0's view - evaluation
+         * ==> [7, AaA]
+         */
+        [Test]
+        public void ThreePlies()
+        {
+            var startState= new GameState(){["AaA"]=7, ["AaB"]=4, ["AbA"]=8, ["AbB"]=9,["BaA"]=2, ["BaB"]=8, ["BaC"]=10, ["BbA"]=6, ["BbB"]=4};
+            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
+            bestEval.Should().Be(7);
+            bestLine.Should().Equal('A', 'a', 'A');
         }
     }
 }
