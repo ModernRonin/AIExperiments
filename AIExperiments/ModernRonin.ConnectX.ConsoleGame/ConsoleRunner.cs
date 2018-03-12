@@ -33,6 +33,8 @@ namespace ModernRonin.ConnectX.ConsoleGame
             if (GameResult.Draw == result) Console.WriteLine("It's a draw");
             else if (GameResult.Defeat == result) Console.WriteLine($"Player {1 - Game.PlayerToMove} has won");
             else Console.WriteLine("Weird result");
+            Console.Write("Press <Enter> to continue...");
+            Console.ReadLine();
         }
     }
 }
