@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace ModernRonin.ConnectX.TreeSearchBot.Tests
@@ -45,6 +46,9 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             startState.AfterMove('B').EvaluatesAs(9);
             startState.AfterMove('C').EvaluatesAs(13);
 
+            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 1);
+            bestEval.Should().Be(13);
+            bestLine.Should().Equal('C');
         }
     }
 }
