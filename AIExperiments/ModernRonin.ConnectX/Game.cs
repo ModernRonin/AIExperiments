@@ -17,7 +17,7 @@ namespace ModernRonin.ConnectX
 
             PlayerToMove = 0;
         }
-        public Game(Game rhs)
+        Game(Game rhs)
         {
             Board = new Board(rhs.Board);
             2.Do(playerId => { mRemainingStones[playerId].AddRange(rhs.mRemainingStones[playerId]); });
