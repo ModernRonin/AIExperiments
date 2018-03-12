@@ -18,11 +18,13 @@ namespace ModernRonin.ConnectX.ConsoleGame
         }
         static GameConfiguration ParseArguments(string[] args)
         {
-            var parser = new FluentCommandLineParser<GameConfiguration>();
-
-            parser.Setup(c => c.BoardWidth).As('w', "width").SetDefault(GameConfiguration.Default.BoardWidth);
-            parser.Setup(c => c.BoardHeight).As('h', "height").SetDefault(GameConfiguration.Default.BoardHeight);
-
+            var result= new GameConfiguration();
+            var parser = new FluentCommandLineParser();
+            parser.Setup<int>('w', "width").SetDefault(GameConfiguration.Default.BoardWidth)
+                  .Callback(w => result.BoardWidth = w);
+            parser.Setup<int>('h', "height").SetDefault(GameConfiguration.Default.BoardHeight)
+                  .Callback(h => result.BoardHeight = h);
+            
             var parsed = parser.Parse(args);
             if (parsed.HasErrors)
             {
@@ -30,8 +32,8 @@ namespace ModernRonin.ConnectX.ConsoleGame
                 return null;
             }
 
-            parser.Object.InitialStonesPerPlayer = GameConfiguration.Default.InitialStonesPerPlayer;
-            return parser.Object;
+            result.InitialStonesPerPlayer = GameConfiguration.Default.InitialStonesPerPlayer;
+            return result;
         }
     }
 }
