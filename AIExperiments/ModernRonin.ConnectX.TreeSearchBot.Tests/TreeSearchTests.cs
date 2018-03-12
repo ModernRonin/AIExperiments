@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,28 +8,27 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
     [TestFixture]
     public class TreeSearchTests
     {
-        class GameState : IGameState<char>, IEnumerable<GameState>
+        class GameState : IGameState<char>
         {
-            readonly Dictionary<char, GameState> mMoves = new Dictionary<char, GameState>();
-            public string State { get; set; }
-            public IEnumerator<GameState> GetEnumerator() => mMoves.Values.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+            #region Implementing IGameState
             public IEnumerable<char> LegalMoves => mMoves.Keys;
-            public int Evaluation { get; set; }
+            public int Evaluation { get; private set; }
             public IGameState<char> Execute(char move) => mMoves[move];
+            #endregion
+            readonly Dictionary<char, GameState> mMoves = new Dictionary<char, GameState>();
+            public int this[string line]
+            {
+                get => line.Aggregate(this, (s, m) => s.AfterMove(m)).Evaluation;
+                set => line.Aggregate(this, (s, m) => s.AfterMove(m)).Evaluation = value;
+            }
             public GameState AfterMove(char move)
             {
                 if (mMoves.ContainsKey(move)) return mMoves[move];
-                var result = new GameState {State = State + move};
+                var result = new GameState();
                 mMoves[move] = result;
                 return result;
             }
             public void EvaluatesAs(int evaluation) => Evaluation = evaluation;
-            public void Add(GameState child)
-            {
-                var move = child.State.Last();
-                mMoves[move] = child;
-            }
         }
 
         /* 0
@@ -41,14 +39,22 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
         [Test]
         public void OnePly()
         {
-            var startState = new GameState();
-            startState.AfterMove('A').EvaluatesAs(10);
-            startState.AfterMove('B').EvaluatesAs(9);
-            startState.AfterMove('C').EvaluatesAs(13);
+            var startState = new GameState {["A"] = 10, ["B"] = 9, ["C"] = 13};
 
             var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 1);
             bestEval.Should().Be(13);
             bestLine.Should().Equal('C');
+        }
+        /* 0
+         * 1        A5           B11             C9                 eval from player 0's view
+         * 2    Aa10  Aa5   Bb11    Bb13    Cc9     Cc17            eval from player 1's view
+         * ==> [11, Bb]
+         */
+        [Test]
+        public void TwoPlies()
+        {
+            var startState = new GameState();
+            //startState["Aa"]= 
         }
     }
 }
