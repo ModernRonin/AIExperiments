@@ -30,9 +30,9 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         }
         public IGameState<Move> Execute(Move move)
         {
-            var copy = mGame.Clone();
-            copy.Execute(move);
-            return new ConnectXGameState(mRules, copy);
+            var gameCopy = mGame.Clone();
+            gameCopy.Execute(move);
+            return new ConnectXGameState(mRules, gameCopy);
         }
     }
 }
