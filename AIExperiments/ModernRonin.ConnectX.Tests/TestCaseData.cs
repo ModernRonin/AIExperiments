@@ -134,6 +134,16 @@ namespace ModernRonin.ConnectX.Tests
                       x.oxoxx",
                     new[] {0, 1, 2, 3, 4, 5, 6}
                 };
+                yield return new object[]
+                {
+                    @"...o...
+                      ...x...
+                      ...o...
+                      ...x...
+                      ...o...
+                      ...x...",
+                    new[] {0, 1, 2, 4, 5, 6}
+                };
             }
         }
     }
