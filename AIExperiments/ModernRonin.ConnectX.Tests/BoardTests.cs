@@ -15,7 +15,10 @@ namespace ModernRonin.ConnectX.Tests
         public void Indexer_Set_Sets_Stone()
         {
             var underTest =
-                new Board(new GameConfiguration {BoardWidth = 3, BoardHeight = 4}) {[2, 1] = new Stone {Owner = 1}};
+                new Board(new GameConfiguration {BoardWidth = 3, BoardHeight = 4})
+                {
+                    [2, 1] = new Stone(StoneKind.Regular, 1)
+                };
             underTest[2, 1].Owner.Should().Be(1);
         }
         [Test]

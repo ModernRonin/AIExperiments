@@ -5,11 +5,20 @@ namespace ModernRonin.ConnectX.TreeSearchBot
 {
     public class ConnectXGameState : IGameState<Move>
     {
-        public IEnumerable<Move> LegalMoves { get; }
+        readonly RuleBook mRules;
+        readonly Game mGame;
+        public ConnectXGameState(RuleBook rules, Game game)
+        {
+            mRules = rules;
+            mGame = game;
+        }
+        public IEnumerable<Move> LegalMoves => mRules.LegalMoves();
         public int Evaluation { get; }
         public IGameState<Move> Execute(Move move)
         {
-            throw new NotImplementedException();
+            var copy= new Game(mGame);
+            copy.Execute(move);
+            return new ConnectXGameState(mRules, copy);
         }
     }
     public class TreeSearchBotPlayer : IPlayer

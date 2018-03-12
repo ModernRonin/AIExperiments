@@ -43,7 +43,7 @@ namespace ModernRonin.ConnectX.Tests
             underTest.Board[0, 0].Should().BeEquivalentTo(new Stone());
 
             underTest.Execute(new Move());
-            underTest.Board[0, 1].Should().BeEquivalentTo(new Stone {Owner = 1});
+            underTest.Board[0, 1].Should().BeEquivalentTo(new Stone(StoneKind.Regular, 1));
 
             underTest.Execute(new Move());
             underTest.Board[0, 2].Should().BeEquivalentTo(new Stone());

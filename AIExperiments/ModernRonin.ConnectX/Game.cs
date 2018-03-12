@@ -12,11 +12,15 @@ namespace ModernRonin.ConnectX
             2.Do(playerId =>
             {
                 mRemainingStones[playerId]
-                    .AddRange(configuration.InitialStonesPerPlayer.Select(k =>
-                        new Stone {Kind = k, Owner = playerId}));
+                    .AddRange(configuration.InitialStonesPerPlayer.Select(k => new Stone(k, playerId)));
             });
 
             PlayerToMove = 0;
+        }
+        public Game(Game rhs)
+        {
+            PlayerToMove = rhs.PlayerToMove;
+            2.Do(playerId => { mRemainingStones[playerId].AddRange(rhs.mRemainingStones[playerId]); });
         }
         public Board Board { get; }
         public int PlayerToMove { get; private set; }
@@ -25,9 +29,10 @@ namespace ModernRonin.ConnectX
         {
             // TODO: make this implementation dependent on rulebook
             mRemainingStones[PlayerToMove].RemoveAt(0);
-            var setYCoordinatesinColumn = Enumerable.Range(0, Board.Height).Where(i => Board[move.X, i].Owner > -1).ToArray();
+            var setYCoordinatesinColumn =
+                Enumerable.Range(0, Board.Height).Where(i => Board[move.X, i].Owner > -1).ToArray();
             var y = setYCoordinatesinColumn.Any() ? setYCoordinatesinColumn.Max() + 1 : 0;
-            Board[move.X, y] = new Stone {Owner = PlayerToMove, Kind = move.StoneKind};
+            Board[move.X, y] = new Stone(move.StoneKind, PlayerToMove);
             PlayerToMove = 0 == PlayerToMove ? 1 : 0;
         }
     }

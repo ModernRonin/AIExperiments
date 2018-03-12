@@ -27,7 +27,7 @@ namespace ModernRonin.ConnectX.Tests
 
             void set(int x, int y)
             {
-                board[x, y] = new Stone {Owner = map(rows[y][x])};
+                board[x, y] = new Stone(StoneKind.Regular,map(rows[y][x]));
             }
 
             7.By(6).Do(set);

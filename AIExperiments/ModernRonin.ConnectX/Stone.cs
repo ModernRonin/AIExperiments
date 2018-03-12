@@ -1,9 +1,14 @@
 ﻿namespace ModernRonin.ConnectX
 {
-    public class Stone
+    public struct Stone
     {
-        public StoneKind Kind { get; set; }
-        public int Owner { get; set; }
-        public static Stone Empty => new Stone {Kind = StoneKind.Regular, Owner = -1};
+        public Stone(StoneKind kind, int owner)
+        {
+            Kind = kind;
+            Owner = owner;
+        }
+        public StoneKind Kind { get; }
+        public int Owner { get; }
+        public static Stone Empty => new Stone( StoneKind.Regular, -1);
     }
 }
