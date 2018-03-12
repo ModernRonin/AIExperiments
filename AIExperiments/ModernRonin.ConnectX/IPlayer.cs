@@ -2,6 +2,6 @@
 {
     public interface IPlayer
     {
-        Move GetMove(IRuleBook rules, Game game);
+        Move GetMove(IRuleBook rules, IGame game);
     }
 }

@@ -5,9 +5,9 @@ namespace ModernRonin.ConnectX
 {
     public class RuleBook : IRuleBook
     {
-        readonly Game mGame;
+        readonly IGame mGame;
         readonly IEnumerable<Coordinate[]> mWinningPossibilities;
-        public RuleBook(Game game)
+        public RuleBook(IGame game)
         {
             mGame = game;
             mWinningPossibilities = WinningTuplesCalculator.WinningTuples(mGame.Board.Width, mGame.Board.Height);

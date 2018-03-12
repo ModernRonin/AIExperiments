@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ModernRonin.ConnectX
 {
-    public class Game
+    public class Game : IGame
     {
         readonly List<Stone>[] mRemainingStones = {new List<Stone>(), new List<Stone>()};
         public Game(GameConfiguration configuration)
@@ -23,6 +23,7 @@ namespace ModernRonin.ConnectX
             2.Do(playerId => { mRemainingStones[playerId].AddRange(rhs.mRemainingStones[playerId]); });
             PlayerToMove = rhs.PlayerToMove;
         }
+        public IGame Clone() => new Game(this);
         public Board Board { get; }
         public int PlayerToMove { get; private set; }
         public IEnumerable<Stone> RemainingStones(int playerId) => mRemainingStones[playerId];

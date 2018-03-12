@@ -5,14 +5,14 @@ namespace ModernRonin.ConnectX
     public abstract class ARunner
     {
         readonly IPlayer[] mPlayers;
-        protected ARunner(Game game, IPlayer[] players)
+        protected ARunner(IGame game, IPlayer[] players)
         {
             if (2 != players.Length) throw new ArgumentException("Need exactly two players", nameof(players));
             mPlayers = players;
             Game = game;
             Rules = new RuleBook(Game);
         }
-        protected Game Game { get; }
+        protected IGame Game { get; }
         protected RuleBook Rules { get; }
         public void Run()
         {

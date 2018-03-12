@@ -5,9 +5,9 @@ namespace ModernRonin.ConnectX.TreeSearchBot
 {
     public class ConnectXGameState : IGameState<Move>
     {
-        readonly Game mGame;
+        readonly IGame mGame;
         readonly IRuleBook mRules;
-        public ConnectXGameState(IRuleBook rules, Game game)
+        public ConnectXGameState(IRuleBook rules, IGame game)
         {
             mRules = rules;
             mGame = game;
@@ -30,7 +30,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         }
         public IGameState<Move> Execute(Move move)
         {
-            var copy = new Game(mGame);
+            var copy = mGame.Clone();
             copy.Execute(move);
             return new ConnectXGameState(mRules, copy);
         }
