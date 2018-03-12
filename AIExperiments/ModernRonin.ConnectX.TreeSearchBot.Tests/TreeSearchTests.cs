@@ -37,7 +37,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          * ==> [13, C]
          */
         [Test]
-        public void OnePly()
+        public void NegaMax_OnePly()
         {
             var startState = new GameState {["A"] = 10, ["B"] = 9, ["C"] = 13};
 
@@ -51,7 +51,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          * ==> [11, Ba]
          */
         [Test]
-        public void TwoPlies()
+        public void NegaMax_TwoPlies()
         {
             var startState = new GameState {["Aa"] = 10, ["Ab"] = 5, ["Ba"] = 11, ["Bb"] = 13, ["Ca"] = 9, ["Cb"] = 17};
             var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 2);
@@ -65,12 +65,21 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          * ==> [7, AaA]
          */
         [Test]
-        public void ThreePlies()
+        public void NegaMax_ThreePlies()
         {
             var startState= new GameState(){["AaA"]=7, ["AaB"]=4, ["AbA"]=8, ["AbB"]=9,["BaA"]=2, ["BaB"]=8, ["BaC"]=10, ["BbA"]=6, ["BbB"]=4};
             var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
             bestEval.Should().Be(7);
             bestLine.Should().Equal('A', 'a', 'A');
+        }
+        [Test]
+        public void NegaMax_Returns_Evaluation_If_No_LegalMoves_Available
+            ()
+        {
+            var startState= new GameState(){[""]=13};
+            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
+            bestEval.Should().Be(13);
+            bestLine.Should().BeEmpty();
         }
     }
 }

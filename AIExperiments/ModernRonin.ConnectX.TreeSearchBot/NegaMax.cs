@@ -7,7 +7,9 @@ namespace ModernRonin.ConnectX.TreeSearchBot
     {
         public static (int, IEnumerable<TMove>) NegaMax<TMove>(IGameState<TMove> startState, int maxDepth, int evaluationSign= 1)
         {
-            if (0 == maxDepth) return (evaluationSign*startState.Evaluation, new TMove[0]);
+            (int, TMove[]) staticEvaluation() => (evaluationSign * startState.Evaluation, new TMove[0]);
+
+            if (0 == maxDepth) return staticEvaluation();
             var bestEval = int.MinValue;
             List<TMove> bestLine = null;
             foreach (var move in startState.LegalMoves)
@@ -23,6 +25,8 @@ namespace ModernRonin.ConnectX.TreeSearchBot
                 }
             }
 
+            if (bestLine == null) return staticEvaluation();
+            
             return (bestEval, bestLine);
         }
     }
