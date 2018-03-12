@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ModernRonin.ConnectX.TreeSearchBot\ModernRonin.ConnectX.TreeSearchBot.csproj">
+      <Project>{a8877f74-96fb-417b-b905-45b04e75b021}</Project>
+      <Name>ModernRonin.ConnectX.TreeSearchBot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModernRonin.ConnectX\ModernRonin.ConnectX.csproj">
       <Project>{c729530c-7ce8-4239-bb30-2323ac779329}</Project>
       <Name>ModernRonin.ConnectX</Name>
