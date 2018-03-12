@@ -39,12 +39,17 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             gameCopy.Received().Execute(new Move(5));
         }
         [Test]
-        public void Execute_Returns_GameState_With_Same_Rules()
+        public void Execute_Returns_GameState_With_Rules_Returned_From_Rules_With()
         {
-            mRules.Result.Returns(GameResult.Victory);
+            var gameCopy = Substitute.For<IGame>();
+            mGame.Clone().Returns(gameCopy);
+            var rulesCopy = Substitute.For<IRuleBook>();
+            mRules.With(gameCopy).Returns(rulesCopy);
+
+            rulesCopy.LegalMoves.Returns(new Move[2]);
             var newState = mUnderTest.Execute(new Move());
 
-            newState.Evaluation.Should().Be(100);
+            newState.LegalMoves.Should().HaveCount(2);
         }
         [Test]
         public void Execute_Returns_New_GameState()

@@ -32,7 +32,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         {
             var gameCopy = mGame.Clone();
             gameCopy.Execute(move);
-            return new ConnectXGameState(mRules, gameCopy);
+            return new ConnectXGameState(mRules.With(gameCopy), gameCopy);
         }
     }
 }
