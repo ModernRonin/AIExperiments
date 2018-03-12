@@ -4,6 +4,7 @@
     <MetricsExclusionList>
       <Value>ModernRonin.ConnectX.ConsoleGame\ModernRonin.ConnectX.ConsoleGame.csproj</Value>
       <Value>ModernRonin.ConnectX.Tests\ModernRonin.ConnectX.Tests.csproj</Value>
+      <Value>ModernRonin.ConnectX.TreeSearchBot.Tests\ModernRonin.ConnectX.TreeSearchBot.Tests.csproj</Value>
     </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
