@@ -60,7 +60,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             foreach (var move in moveSorter(startState.LegalMoves))
             {
                 var newBoard = startState.Execute(move);
-                var (eval, line) = AlphaBetaNegaMax(newBoard, maxDepth - 1, moveSorter, -alpha, -beta - evaluationSign);
+                var (eval, line) = AlphaBetaNegaMax(newBoard, maxDepth - 1, moveSorter, -beta, -alpha, - evaluationSign);
                 eval *= -1;
                 if (eval > bestEval)
                 {
