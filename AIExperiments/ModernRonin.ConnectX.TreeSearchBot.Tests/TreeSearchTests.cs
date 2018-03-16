@@ -32,12 +32,23 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             #endregion
         }
 
-        static IEnumerable<Func<IGameState<char>, int, (int, IEnumerable<char>)>> SearchMethods
+        public class SearchMethod
         {
-            get
+            readonly Func<IGameState<char>, int, (int, IEnumerable<char>)> mMethod;
+            readonly string mName;
+            public SearchMethod(string name, Func<IGameState<char>, int, (int, IEnumerable<char>)> method)
             {
-                yield return (s, d) => TreeSearch.NegaMax(s, d);
+                mMethod = method;
+                mName = name;
             }
+            public (int, IEnumerable<char>) Search(IGameState<char> startState, int maxDepth) =>
+                mMethod(startState, maxDepth);
+            public override string ToString() => mName;
+        }
+
+        static IEnumerable<SearchMethod> SearchMethods
+        {
+            get { yield return new SearchMethod("NegaMax", (s, d) => TreeSearch.NegaMax(s, d)); }
         }
         /* 0                            pick maximum
          * 1    A10     B9      C13     eval from player 0's view - evaluation
@@ -46,13 +57,46 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          */
         [Test]
         [TestCaseSource(nameof(SearchMethods))]
-        public void NegaMax_OnePly(Func<IGameState<char>, int, (int, IEnumerable<char>)> searchMethod)
+        public void NegaMax_OnePly(SearchMethod searchMethod)
         {
             var startState = new GameState {["A"] = 10, ["B"] = 9, ["C"] = 13};
 
-            var (bestEval, bestLine) = searchMethod(startState, 1);
+            var (bestEval, bestLine) = searchMethod.Search(startState, 1);
             bestEval.Should().Be(13);
             bestLine.Should().Equal('C');
+        }
+        [Test]
+        public void NegaMax_Returns_Evaluation_If_No_LegalMoves_Available()
+        {
+            var startState = new GameState {[""] = 13};
+            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
+            bestEval.Should().Be(13);
+            bestLine.Should().BeEmpty();
+        }
+        /* 0                                                                        pick maximum
+         * 1            A7                                  B6                      eval from player 0's view - pick minimum
+         * 2     Aa7             Ab9              Ba10                 Bb6          eval from player 1's view - pick maximum
+         * 3 AaA7   AaB4     AbA8  AbB9    BaA2   BaB8   BaC10     BbA6   BbB4      eval from player 0's view - evaluation
+         * ==> [7, AaA]
+         */
+        [Test]
+        public void NegaMax_ThreePlies()
+        {
+            var startState = new GameState
+            {
+                ["AaA"] = 7,
+                ["AaB"] = 4,
+                ["AbA"] = 8,
+                ["AbB"] = 9,
+                ["BaA"] = 2,
+                ["BaB"] = 8,
+                ["BaC"] = 10,
+                ["BbA"] = 6,
+                ["BbB"] = 4
+            };
+            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
+            bestEval.Should().Be(7);
+            bestLine.Should().Equal('A', 'a', 'A');
         }
         /* 0                                                        pick maximum   
          * 1        A5           B11             C9                 eval from player 0's view - pick minimum
@@ -66,29 +110,6 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 2);
             bestEval.Should().Be(11);
             bestLine.Should().Equal('B', 'a');
-        }
-        /* 0                                                                        pick maximum
-         * 1            A7                                  B6                      eval from player 0's view - pick minimum
-         * 2     Aa7             Ab9              Ba10                 Bb6          eval from player 1's view - pick maximum
-         * 3 AaA7   AaB4     AbA8  AbB9    BaA2   BaB8   BaC10     BbA6   BbB4      eval from player 0's view - evaluation
-         * ==> [7, AaA]
-         */
-        [Test]
-        public void NegaMax_ThreePlies()
-        {
-            var startState= new GameState(){["AaA"]=7, ["AaB"]=4, ["AbA"]=8, ["AbB"]=9,["BaA"]=2, ["BaB"]=8, ["BaC"]=10, ["BbA"]=6, ["BbB"]=4};
-            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
-            bestEval.Should().Be(7);
-            bestLine.Should().Equal('A', 'a', 'A');
-        }
-        [Test]
-        public void NegaMax_Returns_Evaluation_If_No_LegalMoves_Available
-            ()
-        {
-            var startState= new GameState(){[""]=13};
-            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
-            bestEval.Should().Be(13);
-            bestLine.Should().BeEmpty();
         }
     }
 }
