@@ -4,6 +4,21 @@ using System.Linq;
 
 namespace ModernRonin.ConnectX.TreeSearchBot
 {
+    public interface ICache<TMove>
+    {
+        (int, IEnumerable<TMove>) Lookup(
+            IGameState<TMove> gameState,
+            Func<IGameState<TMove>, (int, IEnumerable<TMove>)> producer);
+    }
+
+    public class NullCache<TMove> : ICache<TMove>
+    {
+        public (int, IEnumerable<TMove>) Lookup(
+            IGameState<TMove> gameState,
+            Func<IGameState<TMove>, (int, IEnumerable<TMove>)> producer) =>
+            producer(gameState);
+    }
+
     public static class TreeSearch
     {
         static (int, TMove[]) StaticEvaluation<TMove>(IGameState<TMove> startState, int sign) =>
@@ -11,6 +26,12 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         public static (int, IEnumerable<TMove>) NegaMax<TMove>(
             IGameState<TMove> startState,
             int maxDepth,
+            int evaluationSign = 1) =>
+            NegaMax(startState, maxDepth, new NullCache<TMove>(), evaluationSign);
+        public static (int, IEnumerable<TMove>) NegaMax<TMove>(
+            IGameState<TMove> startState,
+            int maxDepth,
+            ICache<TMove> cache,
             int evaluationSign = 1)
         {
             (int, TMove[]) staticEvaluation() => StaticEvaluation(startState, evaluationSign);
@@ -21,7 +42,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             foreach (var move in startState.LegalMoves)
             {
                 var newBoard = startState.Execute(move);
-                var (eval, line) = NegaMax(newBoard, maxDepth - 1, -evaluationSign);
+                var (eval, line) =  cache.Lookup(newBoard, b=> NegaMax(b, maxDepth - 1, -evaluationSign));
                 eval *= -1;
                 if (eval > bestEval)
                 {
@@ -49,7 +70,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         public static (int, IEnumerable<TMove>) AlphaBetaNegaMax<TMove>(
             IGameState<TMove> startState,
             int maxDepth,
-            int alpha = int.MinValue+1,
+            int alpha = int.MinValue + 1,
             int beta = int.MaxValue,
             int evaluationSign = 1)
         {
@@ -82,7 +103,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             foreach (var move in moveSorter(startState.LegalMoves))
             {
                 var newBoard = startState.Execute(move);
-                var (eval, line) = AlphaBetaNegaMax(newBoard, maxDepth - 1, moveSorter, -beta, -alpha, - evaluationSign);
+                var (eval, line) = AlphaBetaNegaMax(newBoard, maxDepth - 1, moveSorter, -beta, -alpha, -evaluationSign);
                 eval *= -1;
                 if (eval > bestEval)
                 {
