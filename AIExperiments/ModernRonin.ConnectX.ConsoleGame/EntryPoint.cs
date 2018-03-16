@@ -19,13 +19,16 @@ namespace ModernRonin.ConnectX.ConsoleGame
         }
         static IPlayer GetOpponent(OpponentType opponentType)
         {
+            var defaultOpponent = new AlphaBetaTreeSearchBotPlayer(6);
             switch (opponentType)
             {
                 case OpponentType.Human: return new HumanConsolePlayer();
-                case OpponentType.TreeSearch: return new TreeSearchBotPlayer(6);
+                case OpponentType.AlphaBeta:
+                    return defaultOpponent;
+                case OpponentType.NegaMaxCache: return new NegaMaxWithCachingBotPlayer(6);
             }
 
-            return null;
+            return defaultOpponent;
         }
         static (GameConfiguration, OpponentType) ParseArguments(string[] args)
         {
@@ -53,7 +56,8 @@ namespace ModernRonin.ConnectX.ConsoleGame
         enum OpponentType
         {
             Human,
-            TreeSearch
+            AlphaBeta,
+            NegaMaxCache
         }
     }
 }

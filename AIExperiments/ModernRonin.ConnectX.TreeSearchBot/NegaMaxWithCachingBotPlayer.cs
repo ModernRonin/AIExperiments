@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace ModernRonin.ConnectX.TreeSearchBot
 {
-    public class TreeSearchBotPlayer : IPlayer
+    public class NegaMaxWithCachingBotPlayer : IPlayer
     {
+        readonly Cache<Move> mCache = new Cache<Move>(7 * 6 * 3);
         readonly int mMaxDepth;
-        readonly Cache<Move> mCache = new Cache<Move>(7*6*3);
-        public TreeSearchBotPlayer(int maxDepth) => mMaxDepth = maxDepth;
+        public NegaMaxWithCachingBotPlayer(int maxDepth) => mMaxDepth = maxDepth;
         public Move GetMove(IRuleBook rules, IGame game)
         {
             var (_, bestLine) = TreeSearch.NegaMax(new ConnectXGameState(rules, game), mMaxDepth, mCache);
