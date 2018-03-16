@@ -66,10 +66,11 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             bestLine.Should().Equal('C');
         }
         [Test]
-        public void NegaMax_Returns_Evaluation_If_No_LegalMoves_Available()
+        [TestCaseSource(nameof(SearchMethods))]
+        public void NegaMax_Returns_Evaluation_If_No_LegalMoves_Available(SearchMethod searchMethod)
         {
             var startState = new GameState {[""] = 13};
-            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
+            var (bestEval, bestLine) = searchMethod.Search(startState, 3);
             bestEval.Should().Be(13);
             bestLine.Should().BeEmpty();
         }
@@ -80,7 +81,8 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          * ==> [7, AaA]
          */
         [Test]
-        public void NegaMax_ThreePlies()
+        [TestCaseSource(nameof(SearchMethods))]
+        public void NegaMax_ThreePlies(SearchMethod searchMethod)
         {
             var startState = new GameState
             {
@@ -94,7 +96,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
                 ["BbA"] = 6,
                 ["BbB"] = 4
             };
-            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 3);
+            var (bestEval, bestLine) = searchMethod.Search(startState, 3);
             bestEval.Should().Be(7);
             bestLine.Should().Equal('A', 'a', 'A');
         }
@@ -104,10 +106,11 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          * ==> [11, Ba]
          */
         [Test]
-        public void NegaMax_TwoPlies()
+        [TestCaseSource(nameof(SearchMethods))]
+        public void NegaMax_TwoPlies(SearchMethod searchMethod)
         {
             var startState = new GameState {["Aa"] = 10, ["Ab"] = 5, ["Ba"] = 11, ["Bb"] = 13, ["Ca"] = 9, ["Cb"] = 17};
-            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 2);
+            var (bestEval, bestLine) = searchMethod.Search(startState, 2);
             bestEval.Should().Be(11);
             bestLine.Should().Equal('B', 'a');
         }
