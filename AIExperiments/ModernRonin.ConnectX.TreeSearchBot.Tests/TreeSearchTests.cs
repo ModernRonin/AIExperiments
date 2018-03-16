@@ -48,7 +48,11 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
 
         static IEnumerable<SearchMethod> SearchMethods
         {
-            get { yield return new SearchMethod("NegaMax", (s, d) => TreeSearch.NegaMax(s, d)); }
+            get
+            {
+                yield return new SearchMethod("NegaMax", (s, d) => TreeSearch.NegaMax(s, d)); 
+                yield return new SearchMethod("NegaMaxAlphaBeta", (s, d) => TreeSearch.AlphaBetaNegaMax(s, d));
+            }
         }
         /* 0                            pick maximum
          * 1    A10     B9      C13     eval from player 0's view - evaluation
