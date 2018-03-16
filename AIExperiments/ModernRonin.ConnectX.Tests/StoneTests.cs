@@ -25,5 +25,10 @@ namespace ModernRonin.ConnectX.Tests
 
             set.Count.Should().Be(permutationCount);
         }
+        [Test]
+        public void MaxHash()
+        {
+            Stone.MaxHash.Should().Be(3);
+        }
     }
 }

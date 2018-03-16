@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 
 namespace ModernRonin.ConnectX
 {
     public struct Stone
     {
-        static readonly int sNumberOfStoneKinds= Enum.GetNames(typeof(StoneKind)).Length+1;
+        static readonly int sNumberOfStoneKinds= Enum.GetNames(typeof(StoneKind)).Length;
         public Stone(StoneKind kind, int owner)
         {
             Kind = kind;
@@ -20,6 +21,15 @@ namespace ModernRonin.ConnectX
                 
                 var ownerPlace = (Owner + 1)*sNumberOfStoneKinds;
                 var kindPlace = (1+(int)Kind);
+                return ownerPlace + kindPlace;
+            }
+        }
+        public static int MaxHash
+        {
+            get
+            {
+                var ownerPlace = 2 * sNumberOfStoneKinds;
+                var kindPlace = Enum.GetValues(typeof(StoneKind)).Cast<int>().Max() + 1;
                 return ownerPlace + kindPlace;
             }
         }
