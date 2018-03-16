@@ -12,8 +12,15 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             Func<IGameState<TMove>, (int, IEnumerable<TMove>)> producer)
         {
             var key = gameState.UniqueHash;
-            if (!mCache.ContainsKey(key)) mCache[key] = producer(gameState);
+            if (!mCache.ContainsKey(key))
+            {
+                mCache[key] = producer(gameState);
+                ++MissCount;
+            }
+            else ++HitCount;
             return mCache[key];
         }
+        public int HitCount { get; private set; }
+        public int MissCount { get; private set; }
     }
 }

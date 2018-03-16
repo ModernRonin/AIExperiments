@@ -27,7 +27,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             foreach (var move in startState.LegalMoves)
             {
                 var newBoard = startState.Execute(move);
-                var (eval, line) = cache.Lookup(newBoard, b => NegaMax(b, maxDepth - 1, -evaluationSign));
+                var (eval, line) = cache.Lookup(newBoard, b => NegaMax(b, maxDepth - 1, cache, -evaluationSign));
                 eval *= -1;
                 if (eval > bestEval)
                 {

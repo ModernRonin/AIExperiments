@@ -32,10 +32,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             #region Implementing IGameState
             public IEnumerable<char> LegalMoves => mMoves.Keys;
             public int Evaluation { get; private set; }
-            public string UniqueHash
-            {
-                get { return string.Join("", mLine.OrderBy(c => c)); }
-            }
+            public string UniqueHash => mLine;
             public IGameState<char> Execute(char move)
             {
                 Visited.Add(move);
