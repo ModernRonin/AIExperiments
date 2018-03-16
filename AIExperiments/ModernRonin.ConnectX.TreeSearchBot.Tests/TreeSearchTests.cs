@@ -12,6 +12,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
         class GameState : IGameState<char>
         {
             readonly Dictionary<char, GameState> mMoves = new Dictionary<char, GameState>();
+            public HashSet<char> Visited { get; } = new HashSet<char>();
             public int this[string line]
             {
                 get => line.Aggregate(this, (s, m) => s.AfterMove(m)).Evaluation;
@@ -28,7 +29,11 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             #region Implementing IGameState
             public IEnumerable<char> LegalMoves => mMoves.Keys;
             public int Evaluation { get; private set; }
-            public IGameState<char> Execute(char move) => mMoves[move];
+            public IGameState<char> Execute(char move)
+            {
+                Visited.Add(move);
+                return mMoves[move];
+            }
             #endregion
         }
 
@@ -50,9 +55,23 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
         {
             get
             {
-                yield return new SearchMethod("NegaMax", (s, d) => TreeSearch.NegaMax(s, d)); 
+                yield return new SearchMethod("NegaMax", (s, d) => TreeSearch.NegaMax(s, d));
                 yield return new SearchMethod("NegaMaxAlphaBeta", (s, d) => TreeSearch.AlphaBetaNegaMax(s, d));
             }
+        }
+        /* 0                                                
+         * 1        A7              B5                      as soon as B reaches Ba5, 5 being already lower than A7, it does
+         * 2    Aa9   Ab7       Ba5     Bb11                no longer need to visit Bb
+         * ==> [7, Ab]
+        */
+        [Test]
+        public void AlphaBetaNegaMax_DoesNot_Visit_Redundant_Nodes()
+        {
+            var startState = new GameState {["Aa"] = 9, ["Ab"] = 7, ["Ba"] = 5, ["Bb"] = 11};
+            var (bestEval, bestLine) = TreeSearch.AlphaBetaNegaMax(startState, 2);
+            bestEval.Should().Be(7);
+            bestLine.Should().Equal('A', 'b');
+            startState.AfterMove('B').Visited.Should().NotContain('b');
         }
         /* 0                            pick maximum
          * 1    A10     B9      C13     eval from player 0's view - evaluation
@@ -127,21 +146,21 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
         [TestCaseSource(nameof(SearchMethods))]
         public void TwoPlies_Regression_001(SearchMethod searchMethod)
         {
-            var startState= new GameState(){["Aa"]=9, ["Ab"]=7, ["Ba"]=5, ["Bb"]=11};
+            var startState = new GameState {["Aa"] = 9, ["Ab"] = 7, ["Ba"] = 5, ["Bb"] = 11};
             var (bestEval, bestLine) = searchMethod.Search(startState, 2);
             bestEval.Should().Be(7);
             bestLine.Should().Equal('A', 'b');
         }
         /* 0                                                
-         * 1        A7              B5                      as soon as B reaches Ba5, 5 being already lower than A7, it does
-         * 2    Aa7   Ab9       Ba5     Bb11                no longer need to visit Bb
+         * 1        A7              B5                     
+         * 2    Aa7   Ab9       Ba5     Bb11               
          * ==> [7, Aa]
          */
         [Test]
         [TestCaseSource(nameof(SearchMethods))]
         public void TwoPlies_Regression_002(SearchMethod searchMethod)
         {
-            var startState= new GameState(){["Aa"]=7, ["Ab"]=9, ["Ba"]=5, ["Bb"]=11};
+            var startState = new GameState {["Aa"] = 7, ["Ab"] = 9, ["Ba"] = 5, ["Bb"] = 11};
             var (bestEval, bestLine) = searchMethod.Search(startState, 2);
             bestEval.Should().Be(7);
             bestLine.Should().Equal('A', 'a');
@@ -154,7 +173,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
         [TestCaseSource(nameof(SearchMethods))]
         public void TwoPlies_Regression_003(SearchMethod searchMethod)
         {
-            var startState= new GameState(){["A"]=6, ["B"]=5};
+            var startState = new GameState {["A"] = 6, ["B"] = 5};
             var (bestEval, bestLine) = searchMethod.Search(startState, 1);
             bestEval.Should().Be(6);
             bestLine.Should().Equal('A');
