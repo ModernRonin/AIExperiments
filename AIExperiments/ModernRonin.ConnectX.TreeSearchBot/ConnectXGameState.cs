@@ -28,12 +28,21 @@ namespace ModernRonin.ConnectX.TreeSearchBot
                 throw new ArgumentOutOfRangeException();
             }
         }
-        public int UniqueHash { get; }
         public IGameState<Move> Execute(Move move)
         {
             var gameCopy = mGame.Clone();
             gameCopy.Execute(move);
             return new ConnectXGameState(mRules.With(gameCopy), gameCopy);
+        }
+        public int UniqueHash
+        {
+            get
+            {
+                // playerToMove
+                // board
+
+                return 0;
+            }
         }
     }
 }

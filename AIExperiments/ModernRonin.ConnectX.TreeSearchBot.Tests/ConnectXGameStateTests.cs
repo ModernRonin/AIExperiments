@@ -65,5 +65,10 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
 
             mUnderTest.LegalMoves.Should().BeSameAs(moves);
         }
+        [Test]
+        public void UniqueHash_Should_Be_The_Same_If_Same_Stone_And_Same_Player_To_Move()
+        {
+            //TODO: var a= new ConnectXGameState();
+        }
     }
 }
