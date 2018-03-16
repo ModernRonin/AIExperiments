@@ -146,5 +146,18 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             bestEval.Should().Be(7);
             bestLine.Should().Equal('A', 'a');
         }
+        /* 0                                                
+         * 1        A6              B5                      
+         * ==> [6, A]
+         */
+        [Test]
+        [TestCaseSource(nameof(SearchMethods))]
+        public void TwoPlies_Regression_003(SearchMethod searchMethod)
+        {
+            var startState= new GameState(){["A"]=6, ["B"]=5};
+            var (bestEval, bestLine) = searchMethod.Search(startState, 1);
+            bestEval.Should().Be(6);
+            bestLine.Should().Equal('A');
+        }
     }
 }

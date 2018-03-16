@@ -35,20 +35,42 @@ namespace ModernRonin.ConnectX.TreeSearchBot
 
             return (bestEval, bestLine);
         }
+        /// <summary>
+        /// Do not call with int.MinValue for alpha, lest you get an overflow error:
+        ///  (int.MinValue* (-1)) == int.MinValue in C#
+        /// </summary>
+        /// <typeparam name="TMove"></typeparam>
+        /// <param name="startState"></param>
+        /// <param name="maxDepth"></param>
+        /// <param name="alpha"></param>
+        /// <param name="beta"></param>
+        /// <param name="evaluationSign"></param>
+        /// <returns></returns>
         public static (int, IEnumerable<TMove>) AlphaBetaNegaMax<TMove>(
             IGameState<TMove> startState,
             int maxDepth,
-            int alpha = int.MinValue,
+            int alpha = int.MinValue+1,
             int beta = int.MaxValue,
             int evaluationSign = 1)
         {
             return AlphaBetaNegaMax(startState, maxDepth, _ => _, alpha, beta, evaluationSign);
         }
+        /// <summary>
+        /// Do not call with int.MinValue for alpha, lest you get an overflow error:
+        ///  (int.MinValue* (-1)) == int.MinValue in C#
+        /// </summary>
+        /// <typeparam name="TMove"></typeparam>
+        /// <param name="startState"></param>
+        /// <param name="maxDepth"></param>
+        /// <param name="alpha"></param>
+        /// <param name="beta"></param>
+        /// <param name="evaluationSign"></param>
+        /// <returns></returns>
         public static (int, IEnumerable<TMove>) AlphaBetaNegaMax<TMove>(
             IGameState<TMove> startState,
             int maxDepth,
             Func<IEnumerable<TMove>, IEnumerable<TMove>> moveSorter,
-            int alpha = int.MinValue,
+            int alpha = int.MinValue + 1,
             int beta = int.MaxValue,
             int evaluationSign = 1)
         {
