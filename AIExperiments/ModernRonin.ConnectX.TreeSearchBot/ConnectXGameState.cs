@@ -34,14 +34,14 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             gameCopy.Execute(move);
             return new ConnectXGameState(mRules.With(gameCopy), gameCopy);
         }
-        public int UniqueHash
+        public string UniqueHash
         {
             get
             {
-                // playerToMove
-                // board
-
-                return 0;
+                var result = mGame.PlayerToMove.ToString() + ".";
+                var board = mGame.Board;
+                board.Width.By(board.Height).Do((x,y)=> result+= board[x, y].UniqueHash.ToString());
+                return result;
             }
         }
     }

@@ -11,8 +11,6 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
     {
         class GameState : IGameState<char>
         {
-            static readonly Dictionary<char, int> sCharValues =
-                new Dictionary<char, int> {{'A', 0}, {'B', 1}, {'C', 2}, {'a', 3}, {'b', 4}, {'c', 5}};
             readonly string mLine;
             readonly Dictionary<char, GameState> mMoves = new Dictionary<char, GameState>();
             public GameState() : this(string.Empty) { }
@@ -34,13 +32,9 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             #region Implementing IGameState
             public IEnumerable<char> LegalMoves => mMoves.Keys;
             public int Evaluation { get; private set; }
-            public int UniqueHash
+            public string UniqueHash
             {
-                get
-                {
-                    return (int) mLine.OrderBy(c => c)
-                                      .Select((c, index) => sCharValues[c] * Math.Pow(sCharValues.Count, index)).Sum();
-                }
+                get { return string.Join("", mLine.OrderBy(c => c)); }
             }
             public IGameState<char> Execute(char move)
             {

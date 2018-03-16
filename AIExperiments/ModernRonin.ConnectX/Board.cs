@@ -22,9 +22,5 @@ namespace ModernRonin.ConnectX
             get => mStones[x, y];
             set => mStones[x, y] = value;
         }
-        public int UniqueHash
-        {
-            get { return 0; }
-        }
     }
 }
