@@ -8,7 +8,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         public TreeSearchBotPlayer(int maxDepth) => mMaxDepth = maxDepth;
         public Move GetMove(IRuleBook rules, IGame game)
         {
-            var (_, bestLine) = TreeSearch.NegaMax(new ConnectXGameState(rules, game), mMaxDepth);
+            var (_, bestLine) = TreeSearch.AlphaBetaNegaMax(new ConnectXGameState(rules, game), mMaxDepth);
             return bestLine.First();
         }
     }
