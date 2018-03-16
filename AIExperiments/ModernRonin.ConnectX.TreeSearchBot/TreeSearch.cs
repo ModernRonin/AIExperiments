@@ -4,21 +4,6 @@ using System.Linq;
 
 namespace ModernRonin.ConnectX.TreeSearchBot
 {
-    public interface ICache<TMove>
-    {
-        (int, IEnumerable<TMove>) Lookup(
-            IGameState<TMove> gameState,
-            Func<IGameState<TMove>, (int, IEnumerable<TMove>)> producer);
-    }
-
-    public class NullCache<TMove> : ICache<TMove>
-    {
-        public (int, IEnumerable<TMove>) Lookup(
-            IGameState<TMove> gameState,
-            Func<IGameState<TMove>, (int, IEnumerable<TMove>)> producer) =>
-            producer(gameState);
-    }
-
     public static class TreeSearch
     {
         static (int, TMove[]) StaticEvaluation<TMove>(IGameState<TMove> startState, int sign) =>
@@ -42,7 +27,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
             foreach (var move in startState.LegalMoves)
             {
                 var newBoard = startState.Execute(move);
-                var (eval, line) =  cache.Lookup(newBoard, b=> NegaMax(b, maxDepth - 1, -evaluationSign));
+                var (eval, line) = cache.Lookup(newBoard, b => NegaMax(b, maxDepth - 1, -evaluationSign));
                 eval *= -1;
                 if (eval > bestEval)
                 {

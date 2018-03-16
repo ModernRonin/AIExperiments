@@ -11,7 +11,24 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
     {
         class GameState : IGameState<char>
         {
+            static readonly Dictionary<char, int> sCharValues= new Dictionary<char, int>()
+            {
+                {'A', 0},
+                {'B', 1},
+                {'C', 2},
+                {'a', 3},
+                {'b', 4},
+                {'c', 5},
+
+            };
             readonly Dictionary<char, GameState> mMoves = new Dictionary<char, GameState>();
+            readonly string mLine;
+            public GameState() : this(string.Empty) { }
+            GameState(string line)
+            {
+                mLine = line;
+            }
+
             public HashSet<char> Visited { get; } = new HashSet<char>();
             public int this[string line]
             {
@@ -21,7 +38,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             public GameState AfterMove(char move)
             {
                 if (mMoves.ContainsKey(move)) return mMoves[move];
-                var result = new GameState();
+                var result = new GameState(mLine+move);
                 mMoves[move] = result;
                 return result;
             }
@@ -29,6 +46,13 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             #region Implementing IGameState
             public IEnumerable<char> LegalMoves => mMoves.Keys;
             public int Evaluation { get; private set; }
+            public int UniqueHash
+            {
+                get
+                {
+                    return (int) mLine.Select((c, index) => sCharValues[c] * Math.Pow(sCharValues.Count, index)).Sum();
+                }
+            }
             public IGameState<char> Execute(char move)
             {
                 Visited.Add(move);
@@ -50,13 +74,13 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
                 mMethod(startState, maxDepth);
             public override string ToString() => mName;
         }
-
         static IEnumerable<SearchMethod> SearchMethods
         {
             get
             {
                 yield return new SearchMethod("NegaMax", (s, d) => TreeSearch.NegaMax(s, d));
                 yield return new SearchMethod("NegaMaxAlphaBeta", (s, d) => TreeSearch.AlphaBetaNegaMax(s, d));
+                yield return new SearchMethod("NegaMaxWithCache", (s, d)=> TreeSearch.NegaMax(s, d, new Cache<char>(25)));
             }
         }
         /* 0                                                

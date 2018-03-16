@@ -6,6 +6,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
     {
         IEnumerable<TMove> LegalMoves { get; }
         int Evaluation { get; }
+        int UniqueHash { get; }
         IGameState<TMove> Execute(TMove move);
     }
 }
