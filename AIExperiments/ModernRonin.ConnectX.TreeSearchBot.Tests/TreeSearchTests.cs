@@ -61,7 +61,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          */
         [Test]
         [TestCaseSource(nameof(SearchMethods))]
-        public void NegaMax_OnePly(SearchMethod searchMethod)
+        public void OnePly(SearchMethod searchMethod)
         {
             var startState = new GameState {["A"] = 10, ["B"] = 9, ["C"] = 13};
 
@@ -71,7 +71,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
         }
         [Test]
         [TestCaseSource(nameof(SearchMethods))]
-        public void NegaMax_Returns_Evaluation_If_No_LegalMoves_Available(SearchMethod searchMethod)
+        public void SearchMethod_Returns_Evaluation_If_No_LegalMoves_Available(SearchMethod searchMethod)
         {
             var startState = new GameState {[""] = 13};
             var (bestEval, bestLine) = searchMethod.Search(startState, 3);
@@ -86,7 +86,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          */
         [Test]
         [TestCaseSource(nameof(SearchMethods))]
-        public void NegaMax_ThreePlies(SearchMethod searchMethod)
+        public void ThreePlies(SearchMethod searchMethod)
         {
             var startState = new GameState
             {
@@ -111,12 +111,40 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
          */
         [Test]
         [TestCaseSource(nameof(SearchMethods))]
-        public void NegaMax_TwoPlies(SearchMethod searchMethod)
+        public void TwoPlies(SearchMethod searchMethod)
         {
             var startState = new GameState {["Aa"] = 10, ["Ab"] = 5, ["Ba"] = 11, ["Bb"] = 13, ["Ca"] = 9, ["Cb"] = 17};
             var (bestEval, bestLine) = searchMethod.Search(startState, 2);
             bestEval.Should().Be(11);
             bestLine.Should().Equal('B', 'a');
+        }
+        /* 0                                                
+         * 1        A7              B5                      as soon as B reaches Ba5, 5 being already lower than A7, it does
+         * 2    Aa9   Ab7       Ba5     Bb11                no longer need to visit Bb
+         * ==> [7, Ab]
+         */
+        [Test]
+        [TestCaseSource(nameof(SearchMethods))]
+        public void TwoPlies_Regression_001(SearchMethod searchMethod)
+        {
+            var startState= new GameState(){["Aa"]=9, ["Ab"]=7, ["Ba"]=5, ["Bb"]=11};
+            var (bestEval, bestLine) = searchMethod.Search(startState, 2);
+            bestEval.Should().Be(7);
+            bestLine.Should().Equal('A', 'b');
+        }
+        /* 0                                                
+         * 1        A7              B5                      as soon as B reaches Ba5, 5 being already lower than A7, it does
+         * 2    Aa7   Ab9       Ba5     Bb11                no longer need to visit Bb
+         * ==> [7, Aa]
+         */
+        [Test]
+        [TestCaseSource(nameof(SearchMethods))]
+        public void TwoPlies_Regression_002(SearchMethod searchMethod)
+        {
+            var startState= new GameState(){["Aa"]=7, ["Ab"]=9, ["Ba"]=5, ["Bb"]=11};
+            var (bestEval, bestLine) = searchMethod.Search(startState, 2);
+            bestEval.Should().Be(7);
+            bestLine.Should().Equal('A', 'a');
         }
     }
 }

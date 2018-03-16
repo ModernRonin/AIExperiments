@@ -69,7 +69,7 @@ namespace ModernRonin.ConnectX.TreeSearchBot
                     bestLine.Insert(0, move);
                 }
 
-                alpha = Math.Max(alpha, bestEval);
+                if (eval > alpha) alpha = eval;
                 if (alpha >= beta) break;
             }
 
