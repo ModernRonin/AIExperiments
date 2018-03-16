@@ -38,7 +38,16 @@ namespace ModernRonin.ConnectX.TreeSearchBot
         public static (int, IEnumerable<TMove>) AlphaBetaNegaMax<TMove>(
             IGameState<TMove> startState,
             int maxDepth,
-            Func<IEnumerable<TMove>, IOrderedEnumerable<TMove>> moveSorter,
+            int alpha = int.MinValue,
+            int beta = int.MaxValue,
+            int evaluationSign = 1)
+        {
+            return AlphaBetaNegaMax(startState, maxDepth, _ => _, alpha, beta, evaluationSign);
+        }
+        public static (int, IEnumerable<TMove>) AlphaBetaNegaMax<TMove>(
+            IGameState<TMove> startState,
+            int maxDepth,
+            Func<IEnumerable<TMove>, IEnumerable<TMove>> moveSorter,
             int alpha = int.MinValue,
             int beta = int.MaxValue,
             int evaluationSign = 1)
