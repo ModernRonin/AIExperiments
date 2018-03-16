@@ -36,5 +36,13 @@ namespace ModernRonin.ConnectX.ConsoleGame
             Console.Write("Press <Enter> to continue...");
             Console.ReadLine();
         }
+        protected override void UseTimeTakenForMove(int playerToMove, TimeSpan deltaTime)
+        {
+            if (1==playerToMove)
+            {
+                var milliseconds = (int) Math.Round(deltaTime.TotalMilliseconds);
+                Console.WriteLine($"Bot took {milliseconds}ms for move");
+            }
+        }
     }
 }

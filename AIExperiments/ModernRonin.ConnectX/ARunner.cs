@@ -21,7 +21,9 @@ namespace ModernRonin.ConnectX
             do
             {
                 var playerToMove = Game.PlayerToMove;
-                var move = mPlayers[playerToMove].GetMove(Rules, Game);
+                Move move;
+                using (new StopWatchEx(dt => UseTimeTakenForMove(playerToMove, dt)))
+                    move = mPlayers[playerToMove].GetMove(Rules, Game);
                 Game.Execute(move);
                 Render();
                 result = Rules.Result;
@@ -30,6 +32,7 @@ namespace ModernRonin.ConnectX
 
             UseResult(result);
         }
+        protected virtual void UseTimeTakenForMove(int playerToMove, TimeSpan deltaTime) { } 
         protected abstract void UseResult(GameResult result);
         protected abstract void Render();
     }
