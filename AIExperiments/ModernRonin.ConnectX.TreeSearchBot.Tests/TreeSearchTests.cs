@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -31,17 +32,25 @@ namespace ModernRonin.ConnectX.TreeSearchBot.Tests
             #endregion
         }
 
+        static IEnumerable<Func<IGameState<char>, int, (int, IEnumerable<char>)>> SearchMethods
+        {
+            get
+            {
+                yield return (s, d) => TreeSearch.NegaMax(s, d);
+            }
+        }
         /* 0                            pick maximum
          * 1    A10     B9      C13     eval from player 0's view - evaluation
          *
          * ==> [13, C]
          */
         [Test]
-        public void NegaMax_OnePly()
+        [TestCaseSource(nameof(SearchMethods))]
+        public void NegaMax_OnePly(Func<IGameState<char>, int, (int, IEnumerable<char>)> searchMethod)
         {
             var startState = new GameState {["A"] = 10, ["B"] = 9, ["C"] = 13};
 
-            var (bestEval, bestLine) = TreeSearch.NegaMax(startState, 1);
+            var (bestEval, bestLine) = searchMethod(startState, 1);
             bestEval.Should().Be(13);
             bestLine.Should().Equal('C');
         }
